@@ -14,6 +14,8 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
 import { StudentsModule } from './students/students.module';
+import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
+import { DocumentTypeModule } from './document-type/document-type.module';
 
 @Module({
   imports: [
@@ -33,6 +35,8 @@ import { StudentsModule } from './students/students.module';
     EmailModule,
     EmailConfirmationModule,
     StudentsModule,
+    DocumentTypeModule,
+    IdentityDocumentsModule,
   ],
   controllers: [AppController],
   providers: [
