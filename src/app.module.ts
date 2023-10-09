@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
+
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { APP_GUARD } from '@nestjs/core';
-import { CommonModule } from './common/common.module';
-import { RolesGuard } from './auth/guards/roles.guard';
 import { EmailModule } from './email/email.module';
-import { EmailConfirmationService } from './email-confirmation/email-confirmation.service';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
-import { StudentsModule } from './—no-spec/students/students.module';
+import { StudentsModule } from './students/students.module';
 
 @Module({
   imports: [
@@ -29,7 +30,6 @@ import { StudentsModule } from './—no-spec/students/students.module';
     }),
     UsersModule,
     AuthModule,
-    CommonModule,
     EmailModule,
     EmailConfirmationModule,
     StudentsModule,

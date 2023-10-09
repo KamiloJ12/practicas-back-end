@@ -13,13 +13,13 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ nullable: false })
-  password: string;
+  @Column()
+  password?: string;
 
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ nullable: false })
+  @Column()
   role: string;
 
   @Column({ default: false })

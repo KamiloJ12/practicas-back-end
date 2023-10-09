@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Role } from './enums/role.enum';
@@ -30,8 +30,9 @@ export class AuthService {
         role,
         password: hashedPassword,
       });
-      delete createdUser.password;
-      return createdUser;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...user } = createdUser;
+      return user;
     } catch (error) {
       if (error?.code === '23505') {
         throw new BadRequestException('User with that email already exists');
@@ -41,10 +42,11 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findOneByEmail(email);
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (user && isMatch) {
-      user.password = undefined;
+    const userBd = await this.usersService.findOneByEmail(email);
+    const isMatch = await bcrypt.compare(password, userBd.password);
+    if (userBd && isMatch) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...user } = userBd;
       return user;
     }
     return null;
@@ -53,6 +55,7 @@ export class AuthService {
   async login(user: User) {
     const payload = { email: user.email, id: user.id };
     return {
+      user,
       access_token: this.jwtService.sign(payload),
     };
   }

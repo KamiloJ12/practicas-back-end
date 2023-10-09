@@ -28,7 +28,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  signIn(@Req() req): Promise<{ access_token: string }> {
+  signIn(@Req() req) {
     return this.authService.login(req.user);
   }
 
@@ -38,6 +38,11 @@ export class AuthController {
     const user: User = await this.authService.signUp(signUpDto);
     await this.emailConfirmationService.sendVerificationLink(user.email);
     return user;
+  }
+
+  @Get('check-token')
+  checkToken(@Req() req) {
+    return this.authService.login(req.user);
   }
 
   @Roles(Role.Company)
