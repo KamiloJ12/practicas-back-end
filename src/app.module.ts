@@ -7,9 +7,10 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';

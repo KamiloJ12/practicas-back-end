@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { CreateIdentityDocumentDto } from './dto/create-identity-document.dto';
 import { UpdateIdentityDocumentDto } from './dto/update-identity-document.dto';
+
 import { IdentityDocument } from './entities/identity-document.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { join } from 'path';
+import { existsSync } from 'fs';
 
 @Injectable()
 export class IdentityDocumentsService {
@@ -12,10 +16,14 @@ export class IdentityDocumentsService {
     private identityDocumentRepository: Repository<IdentityDocument>,
   ) {}
 
-  async create(createIdentityDocumentDto: CreateIdentityDocumentDto) {
-    const identityDocument = this.identityDocumentRepository.create(
-      createIdentityDocumentDto,
-    );
+  async create(
+    file: Express.Multer.File,
+    createIdentityDocumentDto: CreateIdentityDocumentDto,
+  ) {
+    const identityDocument = this.identityDocumentRepository.create({
+      ...createIdentityDocumentDto,
+      documentFile: file.filename,
+    });
     return await this.identityDocumentRepository.save(identityDocument);
   }
 
@@ -36,5 +44,16 @@ export class IdentityDocumentsService {
 
   remove(id: number) {
     return this.identityDocumentRepository.softRemove({ id });
+  }
+
+  image(documentName: string) {
+    const path = join(
+      __dirname,
+      '../../uploadedFiles/identityDocuments',
+      documentName,
+    );
+    if (!existsSync(path))
+      throw new BadRequestException(`No document with name ${documentName}`);
+    return path;
   }
 }

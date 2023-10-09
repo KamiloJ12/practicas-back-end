@@ -18,7 +18,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 export class DocumentTypeController {
   constructor(private readonly documentTypeService: DocumentTypeService) {}
 
-  //@Roles(Role.Coordinator)
+  @Roles(Role.Coordinator)
   @Post()
   create(@Body() createDocumentTypeDto: CreateDocumentTypeDto) {
     return this.documentTypeService.create(createDocumentTypeDto);

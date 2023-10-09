@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -15,14 +16,15 @@ export class IdentityDocument {
   @Column()
   documentNumber: number;
 
-  @ManyToOne(() => DocumentType, (documentType) => documentType.documents)
-  type: DocumentType;
+  @ManyToOne(() => DocumentType, { eager: true })
+  @JoinColumn({ name: 'documentType' })
+  documentType: DocumentType;
 
   @Column()
-  IssuanceDate: Date; // fecha de emision
+  issuanceDate: Date; // fecha de emision
 
   @Column()
-  IssuancePlace: string; // fecha de emision
+  issuancePlace: string; // fecha de emision
 
   @Column()
   documentFile: string; // documento => pdf

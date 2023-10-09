@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   Column,
@@ -14,7 +15,8 @@ export class User {
   email: string;
 
   @Column()
-  password?: string;
+  @Exclude()
+  password: string;
 
   @Column({ default: true })
   isActive: boolean;
@@ -26,5 +28,6 @@ export class User {
   isEmailConfirmed: boolean;
 
   @DeleteDateColumn()
+  @Exclude()
   deletedAt: Date;
 }

@@ -30,9 +30,8 @@ export class AuthService {
         role,
         password: hashedPassword,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...user } = createdUser;
-      return user;
+
+      return createdUser;
     } catch (error) {
       if (error?.code === '23505') {
         throw new BadRequestException('User with that email already exists');
@@ -42,11 +41,9 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const userBd = await this.usersService.findOneByEmail(email);
-    const isMatch = await bcrypt.compare(password, userBd.password);
-    if (userBd && isMatch) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...user } = userBd;
+    const user = await this.usersService.findOneByEmail(email);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (user && isMatch) {
       return user;
     }
     return null;

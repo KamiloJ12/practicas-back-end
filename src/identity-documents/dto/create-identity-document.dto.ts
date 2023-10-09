@@ -1,22 +1,28 @@
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-class DocumentType {
+/* class DocumentType {
   @IsNumber()
   id: number;
-}
+} */
 
 export class CreateIdentityDocumentDto {
+  @IsNotEmpty()
   @IsNumber()
+  @Transform(({ value }) => Number(value))
   documentNumber: number;
 
-  type: DocumentType;
+  @IsNotEmpty()
+  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  type: number;
 
+  @IsNotEmpty()
   @IsDate()
-  IssuanceDate: Date; // fecha de emision
+  @Type(() => Date)
+  issuanceDate: Date; // fecha de emision
 
+  @IsNotEmpty()
   @IsString()
-  IssuancePlace: string; // fecha de emision
-
-  @IsString()
-  documentFile: string; // documento => pdf
+  issuancePlace: string; // fecha de emision
 }
