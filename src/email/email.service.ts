@@ -1,23 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { createTransport } from 'nodemailer';
-import * as Mail from 'nodemailer/lib/mailer';
-import { ConfigService } from '@nestjs/config';
+import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 @Injectable()
 export class EmailService {
-  private nodemailerTransport: Mail;
+  constructor(private mailerService: MailerService) {}
 
-  constructor(configService: ConfigService) {
-    this.nodemailerTransport = createTransport({
-      service: configService.get('EMAIL_SERVICE'),
-      auth: {
-        user: configService.get('EMAIL_USER'),
-        pass: configService.get('EMAIL_PASSWORD'),
-      },
-    });
+  async sendMail(options: ISendMailOptions) {
+    try {
+      return await this.mailerService.sendMail(options);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 
-  sendMail(options: Mail.Options) {
-    return this.nodemailerTransport.sendMail(options);
+  async sendEmailConfirmation(
+    webSiteName: string,
+    email: string,
+    url: string,
+    expirationTime: string,
+  ) {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        // from: '"Support Team" <support@example.com>', // override default from
+        subject: `Verificación de Correo Electrónico para ${webSiteName}`,
+        template: './confirmation',
+        context: {
+          email,
+          webSiteName,
+          url,
+          expirationTime,
+        },
+      });
+    } catch (error) {
+      new InternalServerErrorException();
+    }
   }
 }

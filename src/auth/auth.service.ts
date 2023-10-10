@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -55,5 +56,38 @@ export class AuthService {
       user,
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async requestPasswordReset(email: string): Promise<void> {
+    const user = await this.usersService.findOneByEmail(email);
+    if (!user) {
+      throw new NotFoundException('user with this email not found');
+    }
+
+    const payload = { email: user.email, id: user.id };
+    const token = this.jwtService.sign(payload);
+    console.log(token);
+  }
+
+  async resetPassword(id: number, newPassword: string) {
+    const hashedPassword: string = await bcrypt.hash(newPassword, 10);
+    return this.usersService.update(id, { password: hashedPassword });
+  }
+
+  async resetPasswordToken(token: string, newPasswrod: string) {
+    try {
+      const payload = await this.jwtService.verify(token);
+
+      if (typeof payload === 'object' && 'email' in payload) {
+        this.resetPassword(payload.id, newPasswrod);
+      } else {
+        throw new BadRequestException();
+      }
+    } catch (error) {
+      if (error?.name === 'TokenExpiredError') {
+        throw new BadRequestException('Email confirmation token expired');
+      }
+      throw new BadRequestException('Bad confirmation token');
+    }
   }
 }

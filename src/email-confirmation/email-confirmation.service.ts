@@ -22,19 +22,18 @@ export class EmailConfirmationService {
         'JWT_VERIFICATION_TOKEN_EXPIRATION_TIME',
       ),
     });
+    const webSiteName = this.configService.get('WEB_SITE_NAME');
 
     const url = `${this.configService.get(
       'EMAIL_CONFIRMATION_URL',
     )}?token=${token}`;
 
-    const text = `Welcome to the application. To confirm the email address, click here: ${url}`;
-
-    return this.emailService.sendMail({
-      from: 'cristiancamilojv@ufps.edu.co',
-      to: email,
-      subject: 'Email confirmation',
-      text,
-    });
+    return this.emailService.sendEmailConfirmation(
+      webSiteName,
+      email,
+      url,
+      '4',
+    );
   }
 
   async confirmEmail(email: string) {

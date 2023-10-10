@@ -7,7 +7,7 @@ import { UpdateIdentityDocumentDto } from './dto/update-identity-document.dto';
 
 import { IdentityDocument } from './entities/identity-document.entity';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class IdentityDocumentsService {
@@ -35,7 +35,27 @@ export class IdentityDocumentsService {
     return this.identityDocumentRepository.findOneBy({ id });
   }
 
-  update(id: number, updateIdentityDocumentDto: UpdateIdentityDocumentDto) {
+  async update(
+    id: number,
+    updateIdentityDocumentDto: UpdateIdentityDocumentDto,
+    file?: Express.Multer.File,
+  ) {
+    if (file) {
+      const identityDocument = await this.findOne(id);
+      const documentName = identityDocument.documentFile;
+      const path = join(
+        __dirname,
+        '../../upload/identityDocuments',
+        documentName,
+      );
+      unlinkSync(path);
+
+      return this.identityDocumentRepository.update(id, {
+        ...updateIdentityDocumentDto,
+        documentFile: file.filename,
+      });
+    }
+
     return this.identityDocumentRepository.update(
       id,
       updateIdentityDocumentDto,
@@ -49,7 +69,7 @@ export class IdentityDocumentsService {
   image(documentName: string) {
     const path = join(
       __dirname,
-      '../../uploadedFiles/identityDocuments',
+      '../../upload/identityDocuments',
       documentName,
     );
     if (!existsSync(path))

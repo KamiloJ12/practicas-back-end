@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  Optional,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -34,7 +35,7 @@ export class IdentityDocumentsController {
     FileInterceptor('file', {
       fileFilter: fileImagesFilter,
       storage: diskStorage({
-        destination: './uploadedFiles/identityDocuments',
+        destination: './upload/identityDocuments',
         filename: fileNamer,
       }),
     }),
@@ -62,15 +63,26 @@ export class IdentityDocumentsController {
     return this.identityDocumentsService.findOne(id);
   }
 
-  // TODO:Arreglar - que se elimine archvio anterior
-  @Roles(Role.Coordinator)
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: fileImagesFilter,
+      storage: diskStorage({
+        destination: './upload/identityDocuments',
+        filename: fileNamer,
+      }),
+    }),
+  )
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateIdentityDocumentDto: UpdateIdentityDocumentDto,
+    @UploadedFile() @Optional() file?: Express.Multer.File,
   ) {
-    return this.identityDocumentsService.update(id, updateIdentityDocumentDto);
+    return this.identityDocumentsService.update(
+      id,
+      updateIdentityDocumentDto,
+      file,
+    );
   }
 
   @Delete(':id')

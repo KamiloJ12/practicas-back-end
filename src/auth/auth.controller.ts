@@ -4,24 +4,28 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/sign-up.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Public } from './decorators/public.decorator';
-import { Roles } from './decorators/roles.decorator';
-import { Role } from './enums/role.enum';
-import { EmailConfirmationService } from 'src/email-confirmation/email-confirmation.service';
 import { User } from 'src/users/entities/user.entity';
+
+import { AuthService } from './auth.service';
+import { EmailConfirmationService } from 'src/email-confirmation/email-confirmation.service';
+
+import { SignUpDto, ResetPasswordDto, PasswordResetDto } from './dto';
+
+import { Public } from './decorators/public.decorator';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { EmailService } from 'src/email/email.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private emailConfirmationService: EmailConfirmationService,
+    private emailService: EmailService,
   ) {}
 
   @Public()
@@ -36,7 +40,7 @@ export class AuthController {
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
     const user: User = await this.authService.signUp(signUpDto);
-    await this.emailConfirmationService.sendVerificationLink(user.email);
+    this.emailConfirmationService.sendVerificationLink(user.email);
     return user;
   }
 
@@ -45,15 +49,25 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @Roles(Role.Company)
-  @Get('company')
-  getProfile(@Req() req) {
-    return req.user;
+  @Post('reset-password')
+  async resetPassword(@Req() req, @Body() resetPasswordDto: ResetPasswordDto) {
+    const { id } = req.user;
+    return this.authService.resetPassword(id, resetPasswordDto.newPassword);
   }
 
-  @Roles(Role.Student)
-  @Get('estudent')
-  getProfileEs(@Req() req) {
-    return req.user;
+  @Post('request-password-reset')
+  async requestPasswordReset(@Body() passwordResetDto: PasswordResetDto) {
+    return this.authService.requestPasswordReset(passwordResetDto.email);
+  }
+
+  @Post('reset-password/:token')
+  async resetPasswordToken(
+    @Param('token') token: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ) {
+    return this.authService.resetPasswordToken(
+      token,
+      resetPasswordDto.newPassword,
+    );
   }
 }
