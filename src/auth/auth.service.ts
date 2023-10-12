@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -11,12 +12,18 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { Role } from './enums/role.enum';
+import { EmailConfirmationService } from 'src/email-confirmation/email-confirmation.service';
+import { EmailService } from 'src/email/email.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
+    private emailConfirmationService: EmailConfirmationService,
+    private emailService: EmailService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -26,13 +33,13 @@ export class AuthService {
         ? Role.Student
         : Role.Company;
 
-      const createdUser = await this.usersService.create({
+      const user = await this.usersService.create({
         ...signUpDto,
         role,
         password: hashedPassword,
       });
-
-      return createdUser;
+      this.emailConfirmationService.sendVerificationLink(signUpDto.email);
+      return this.login(user);
     } catch (error) {
       if (error?.code === '23505') {
         throw new BadRequestException('User with that email already exists');
@@ -42,12 +49,16 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string) {
-    const user = await this.usersService.findOneByEmail(email);
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (user && isMatch) {
-      return user;
+    try {
+      const user = await this.usersService.findOneByEmail(email);
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (user && isMatch) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      throw new UnauthorizedException();
     }
-    return null;
   }
 
   async login(user: User) {
@@ -66,7 +77,15 @@ export class AuthService {
 
     const payload = { email: user.email, id: user.id };
     const token = this.jwtService.sign(payload);
-    console.log(token);
+    const url = `${this.configService.get(
+      'EMAIL_CONFIRMATION_URL',
+    )}?token=${token}`;
+
+    return this.emailService.sendEmailResetPassword(
+      user.email,
+      url,
+      '10 minutos',
+    );
   }
 
   async resetPassword(id: number, newPassword: string) {

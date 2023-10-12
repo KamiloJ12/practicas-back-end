@@ -1,37 +1,54 @@
+<html>
+
 <head>
-    <title>Confirmación del email</title>
     <style>
-        a{
-            margin: 3px;
-            border-radius: 20px;
-            border-color: crimson;
+        a {
+            display: block;
+            padding: 10px;
+            border-radius: 8px;
             text-decoration: none;
+            text-align: center;
+            background-color: crimson;
+            color: white;
+            width: 100%;
         }
+
+        body {
+            padding: 14px;
+        }
+
+        .btn-container {
+            padding: 14px 8px 14px 0px;
+        }
+
     </style>
 </head>
 
 <body>
-    <p>Hola {{ email }},</p>
-    <p>¡Bienvenido/a a {{ webSiteName }}!</p>
-    <p>Para completar tu registro y asegurar la seguridad de tu cuenta, necesitamos que verifiques tu dirección de email
-        electrónico.</p>
-    <p>Por favor, haz clic en el siguiente enlace para verificar tu email electrónico:</p>
-    <p>
-        <a href="{{ url }}">Verificar</a>
-    </p>
+    <div>
+        <h3>Hola {{ email }},</h3>
 
-    <p>Este enlace expirará en {{ expirationTime }} días, así que asegúrate de hacer clic lo antes posible.</p>
-    <p>Si no has creado una cuenta en {{ webSiteName }}, puedes ignorar este email electrónico. Tu información está
-        segura con nosotros.</p>
+        <p>¡Bienvenido/a {{ webSiteName }}!</p>
+        <p>
+            Para completar tu registro y asegurar la seguridad de tu cuenta, necesitamos que verifiques tu dirección de
+            email electrónico. Por favor, haz clic en el siguiente enlace para verificar tu email electrónico:
+        </p>
+        <div class="btn-container">
+            <a href="{{ url }}">Verificar</a>
+        </div>
 
-    <p>Gracias por unirte a {{ webSiteName }}. ¡Esperamos que disfrutes de tu experiencia!</p>
+        <p>
+            Este enlace expirará en {{ expirationTime }} días, así que asegúrate de hacer clic lo antes posible.
+            Si no has creado una cuenta en {{ webSiteName }}, puedes ignorar este email electrónico. Tu información está
+            segura con nosotros.
+        </p>
 
-    <p>Si tienes alguna pregunta o necesitas asistencia, no dudes en responder a este email electrónico.</p>
+        <p>Gracias por unirte a {{ webSiteName }}. ¡Esperamos que disfrutes de tu experiencia!</p>
+        <p>Si tienes alguna pregunta o necesitas asistencia, no dudes en responder a este email electrónico.</p>
 
-    <p>Saludos,</p>
-    <p>El Equipo de {{ webSiteName }}</p>
-
-
+        <p>Saludos,</p>
+        <p>El Equipo de {{ webSiteName }}</p>
+    </div>
 </body>
 
 </html>

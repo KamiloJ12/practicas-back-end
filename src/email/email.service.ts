@@ -36,4 +36,26 @@ export class EmailService {
       new InternalServerErrorException();
     }
   }
+
+  async sendEmailResetPassword(
+    email: string,
+    url: string,
+    expirationTime: string,
+  ) {
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        // from: '"Support Team" <support@example.com>', // override default from
+        subject: `Recuperación de Contraseña`,
+        template: './reset-password',
+        context: {
+          email,
+          url,
+          expirationTime,
+        },
+      });
+    } catch (error) {
+      new InternalServerErrorException();
+    }
+  }
 }

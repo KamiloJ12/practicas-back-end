@@ -4,29 +4,26 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
 
 import { AuthService } from './auth.service';
-import { EmailConfirmationService } from 'src/email-confirmation/email-confirmation.service';
 
-import { SignUpDto, ResetPasswordDto, PasswordResetDto } from './dto';
+import {
+  SignUpDto,
+  ResetPasswordDto,
+  PasswordResetDto,
+  ResetPasswordTokenDto,
+} from './dto';
 
 import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { EmailService } from 'src/email/email.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private emailConfirmationService: EmailConfirmationService,
-    private emailService: EmailService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
   @HttpCode(HttpStatus.OK)
@@ -39,9 +36,7 @@ export class AuthController {
   @Public()
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
-    const user: User = await this.authService.signUp(signUpDto);
-    this.emailConfirmationService.sendVerificationLink(user.email);
-    return user;
+    return this.authService.signUp(signUpDto);
   }
 
   @Get('check-token')
@@ -55,19 +50,19 @@ export class AuthController {
     return this.authService.resetPassword(id, resetPasswordDto.newPassword);
   }
 
+  @Public()
   @Post('request-password-reset')
   async requestPasswordReset(@Body() passwordResetDto: PasswordResetDto) {
     return this.authService.requestPasswordReset(passwordResetDto.email);
   }
 
-  @Post('reset-password/:token')
+  @Post('reset-password-token')
   async resetPasswordToken(
-    @Param('token') token: string,
-    @Body() resetPasswordDto: ResetPasswordDto,
+    @Body() resetPasswordTokenDto: ResetPasswordTokenDto,
   ) {
     return this.authService.resetPasswordToken(
-      token,
-      resetPasswordDto.newPassword,
+      resetPasswordTokenDto.token,
+      resetPasswordTokenDto.newPassword,
     );
   }
 }
