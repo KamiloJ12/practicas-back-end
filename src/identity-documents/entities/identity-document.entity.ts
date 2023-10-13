@@ -1,4 +1,5 @@
 import { DocumentType } from 'src/document-type/entities/document-type.entity';
+
 import {
   Entity,
   Column,
@@ -13,10 +14,7 @@ export class IdentityDocument {
   id: number;
 
   @Column({ unique: true })
-  documentNumber: number;
-
-  @ManyToOne(() => DocumentType, (DocumentType) => DocumentType.documents)
-  documentType: DocumentType;
+  documentNumber: string;
 
   @Column()
   issuanceDate: Date; // fecha de emision
@@ -26,6 +24,9 @@ export class IdentityDocument {
 
   @Column()
   documentFile: string; // documento => pdf
+
+  @ManyToOne(() => DocumentType, (documentType) => documentType.documents)
+  documentType: DocumentType;
 
   @DeleteDateColumn()
   deletedAt: Date;

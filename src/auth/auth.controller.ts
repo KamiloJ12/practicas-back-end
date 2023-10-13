@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -44,7 +45,7 @@ export class AuthController {
     return this.authService.login(req.user);
   }
 
-  @Post('reset-password')
+  @Patch('reset-password')
   async resetPassword(@Req() req, @Body() resetPasswordDto: ResetPasswordDto) {
     const { id } = req.user;
     return this.authService.resetPassword(id, resetPasswordDto.newPassword);
@@ -57,7 +58,7 @@ export class AuthController {
   }
 
   @Public()
-  @Post('reset-password-token')
+  @Patch('reset-password-token')
   async resetPasswordToken(
     @Body() resetPasswordTokenDto: ResetPasswordTokenDto,
   ) {

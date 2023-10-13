@@ -18,9 +18,6 @@ export class DocumentType {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany(
-    () => IdentityDocument,
-    (IdentityDocument) => IdentityDocument.documentType,
-  )
+  @OneToMany(() => IdentityDocument, (document) => document.documentType)
   documents: IdentityDocument[];
 }

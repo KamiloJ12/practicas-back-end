@@ -1,8 +1,12 @@
+import { User } from 'src/users/entities/user.entity';
+import { IdentityDocument } from '../../identity-documents/entities/identity-document.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   DeleteDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -16,10 +20,11 @@ export class Student {
   @Column()
   lastName: string; // Apellidos
 
-  @Column()
+  @Column({ unique: true })
   studentCode: number; // Codigo
 
-  classSchedule: any; // horario de clase -> documento
+  @Column()
+  classSchedule: string; // horario de clase -> documento
 
   @Column()
   gender: string;
@@ -27,15 +32,28 @@ export class Student {
   @Column()
   address: string; // dirección
 
-  @Column()
+  @Column({ type: 'bigint' })
   phoneNumber: number; // dirección de telefono
 
   @Column()
   currentSemester: number; // semetre actual
 
+  @Column()
   resumeDocumentFile: string; // hoja de vida -> documento
 
+  @Column()
   status: string;
+
+  @OneToOne(() => IdentityDocument, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  identityDocument: IdentityDocument;
+
+  @OneToOne(() => User, (user) => user.student)
+  @JoinColumn()
+  user: User;
 
   @DeleteDateColumn()
   deletedAt: Date;

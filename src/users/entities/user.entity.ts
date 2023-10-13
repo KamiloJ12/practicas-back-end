@@ -1,9 +1,11 @@
 import { Exclude } from 'class-transformer';
+import { Student } from 'src/students/entities/student.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   DeleteDateColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -26,6 +28,9 @@ export class User {
 
   @Column({ default: false })
   isEmailConfirmed: boolean;
+
+  @OneToOne(() => Student, (student) => student.user)
+  student: Student;
 
   @DeleteDateColumn()
   @Exclude()

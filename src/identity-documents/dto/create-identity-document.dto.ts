@@ -1,12 +1,11 @@
-import { Transform, Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { DocumentType } from 'src/document-type/entities/document-type.entity';
 
 export class CreateIdentityDocumentDto {
   @IsNotEmpty()
-  @IsNumber()
-  @Transform(({ value }) => Number(value))
-  documentNumber: number;
+  @IsString()
+  documentNumber: string;
 
   @IsNotEmpty()
   documentType: DocumentType;
