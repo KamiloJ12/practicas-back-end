@@ -19,5 +19,5 @@ export class Country {
   deletedAt: Date;
 
   @OneToMany(() => Departament, (departament) => departament.country)
-  public departaments: Departament[];
+  departaments: Departament[];
 }

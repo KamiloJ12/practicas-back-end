@@ -7,7 +7,10 @@ import {
   DeleteDateColumn,
   OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Departament } from 'src/departaments/entities/departament.entity';
+import { Municipality } from 'src/municipalities/entities/municipality.entity';
 
 @Entity()
 export class Student {
@@ -54,6 +57,14 @@ export class Student {
   @OneToOne(() => User, (user) => user.student)
   @JoinColumn()
   user: User;
+
+  @ManyToOne(() => Departament, (departament) => departament.students)
+  @JoinColumn()
+  residenceDepartament: Departament;
+
+  @ManyToOne(() => Municipality, (municipality) => municipality.students)
+  @JoinColumn()
+  residenceMunicipality: Municipality;
 
   @DeleteDateColumn()
   deletedAt: Date;
