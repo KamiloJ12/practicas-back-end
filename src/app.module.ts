@@ -19,6 +19,7 @@ import { IdentityDocumentsModule } from './identity-documents/identity-documents
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { CountriesModule } from './countries/countries.module';
 import { DepartamentsModule } from './departaments/departaments.module';
+import { MunicipalitiesModule } from './municipalities/municipalities.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { DepartamentsModule } from './departaments/departaments.module';
     IdentityDocumentsModule,
     CountriesModule,
     DepartamentsModule,
+    MunicipalitiesModule,
   ],
   controllers: [AppController],
   providers: [

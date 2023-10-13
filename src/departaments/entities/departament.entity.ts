@@ -1,9 +1,11 @@
 import { Country } from 'src/countries/entities/country.entity';
+import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,4 +22,7 @@ export class Departament {
 
   @ManyToOne(() => Country, (country) => country.departaments)
   country: Country;
+
+  @OneToMany(() => Municipality, (municipality) => municipality.departament)
+  public municipalities: Municipality[];
 }
