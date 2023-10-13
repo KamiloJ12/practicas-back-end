@@ -1,14 +1,14 @@
-import { Departament } from 'src/departaments/entities/departament.entity';
+import { Country } from 'src/countries/entities/country.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class Country {
+export class Departament {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,6 +18,6 @@ export class Country {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany(() => Departament, (departament) => departament.country)
-  public departaments: Departament[];
+  @ManyToOne(() => Country, (country) => country.departaments)
+  country: Country;
 }

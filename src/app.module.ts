@@ -18,6 +18,7 @@ import { StudentsModule } from './students/students.module';
 import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { CountriesModule } from './countries/countries.module';
+import { DepartamentsModule } from './departaments/departaments.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { CountriesModule } from './countries/countries.module';
     DocumentTypeModule,
     IdentityDocumentsModule,
     CountriesModule,
+    DepartamentsModule,
   ],
   controllers: [AppController],
   providers: [

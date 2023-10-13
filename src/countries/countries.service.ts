@@ -30,6 +30,6 @@ export class CountriesService {
   }
 
   remove(id: number) {
-    return this.countriesRepository.softDelete({ id });
+    return this.countriesRepository.softRemove({ id });
   }
 }
