@@ -56,6 +56,7 @@ export class AuthController {
     return this.authService.requestPasswordReset(passwordResetDto.email);
   }
 
+  @Public()
   @Post('reset-password-token')
   async resetPasswordToken(
     @Body() resetPasswordTokenDto: ResetPasswordTokenDto,

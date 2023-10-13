@@ -63,6 +63,7 @@ export class IdentityDocumentsController {
     return this.identityDocumentsService.findOne(id);
   }
 
+  @Roles(Role.Coordinator)
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: fileImagesFilter,
@@ -85,11 +86,13 @@ export class IdentityDocumentsController {
     );
   }
 
+  @Roles(Role.Coordinator)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.identityDocumentsService.remove(id);
   }
 
+  @Roles(Role.Coordinator)
   @Get('document/:documentName')
   findProductImage(
     @Param('documentName') documentName: string,

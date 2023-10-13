@@ -28,11 +28,16 @@ export class IdentityDocumentsService {
   }
 
   findAll() {
-    return this.identityDocumentRepository.find();
+    return this.identityDocumentRepository.find({
+      relations: ['documentType'],
+    });
   }
 
   findOne(id: number) {
-    return this.identityDocumentRepository.findOneBy({ id });
+    return this.identityDocumentRepository.findOne({
+      where: { id },
+      relations: ['documentType'],
+    });
   }
 
   async update(

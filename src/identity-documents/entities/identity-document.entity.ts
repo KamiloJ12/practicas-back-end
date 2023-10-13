@@ -5,7 +5,6 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -13,11 +12,10 @@ export class IdentityDocument {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   documentNumber: number;
 
-  @ManyToOne(() => DocumentType, { eager: true })
-  @JoinColumn({ name: 'documentType' })
+  @ManyToOne(() => DocumentType, (DocumentType) => DocumentType.documents)
   documentType: DocumentType;
 
   @Column()

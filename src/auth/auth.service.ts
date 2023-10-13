@@ -78,7 +78,7 @@ export class AuthService {
     const payload = { email: user.email, id: user.id };
     const token = this.jwtService.sign(payload);
     const url = `${this.configService.get(
-      'EMAIL_CONFIRMATION_URL',
+      'RESET_PASSWORD_URL',
     )}?token=${token}`;
 
     return this.emailService.sendEmailResetPassword(
