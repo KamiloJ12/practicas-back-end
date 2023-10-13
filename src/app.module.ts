@@ -17,6 +17,7 @@ import { EmailConfirmationModule } from './email-confirmation/email-confirmation
 import { StudentsModule } from './students/students.module';
 import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
+import { CountriesModule } from './countries/countries.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { DocumentTypeModule } from './document-type/document-type.module';
     StudentsModule,
     DocumentTypeModule,
     IdentityDocumentsModule,
+    CountriesModule,
   ],
   controllers: [AppController],
   providers: [

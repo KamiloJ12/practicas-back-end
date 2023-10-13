@@ -68,7 +68,7 @@ export class IdentityDocumentsService {
   }
 
   remove(id: number) {
-    return this.identityDocumentRepository.softRemove({ id });
+    return this.identityDocumentRepository.softDelete({ id });
   }
 
   image(documentName: string) {
