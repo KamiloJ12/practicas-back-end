@@ -19,17 +19,17 @@ export class IdentityDocument {
   @Column({ unique: true })
   documentNumber: string;
 
-  @Column()
-  issuanceDate: Date; // fecha de emision
-
-  @Column()
-  issuancePlace: string; // fecha de emision
-
   @ManyToOne(
     () => Municipality,
     (municipality) => municipality.identityDocuments,
   )
-  documentFile: Municipality; // documento => pdf
+  issuanceDate: Municipality; // fecha de emision
+
+  @Column()
+  issuancePlace: string; // fecha de emision
+
+  @Column()
+  documentFile: string; // documento => pdf
 
   @ManyToOne(() => DocumentType, (documentType) => documentType.documents)
   documentType: DocumentType;
