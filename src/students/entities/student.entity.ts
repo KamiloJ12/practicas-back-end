@@ -13,6 +13,7 @@ import {
 } from 'typeorm';
 import { Departament } from 'src/departaments/entities/departament.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
+import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
 
 @Entity()
 export class Student {
@@ -67,6 +68,13 @@ export class Student {
   @ManyToOne(() => Municipality, (municipality) => municipality.students)
   @JoinColumn()
   residenceMunicipality: Municipality;
+
+  @OneToOne(
+    () => HealthCareCompaniesEnrollment,
+    (healthCareCompaniesEnrollment) => healthCareCompaniesEnrollment.student,
+  )
+  @JoinColumn()
+  healthCareCompany: HealthCareCompaniesEnrollment;
 
   @CreateDateColumn()
   createdDate: Date;

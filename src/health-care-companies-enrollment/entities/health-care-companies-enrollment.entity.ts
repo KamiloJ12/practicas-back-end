@@ -1,11 +1,12 @@
 import { HealthCareCompany } from 'src/health-care-companies/entities/health-care-company.entity';
+import { Student } from 'src/students/entities/student.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,8 +29,10 @@ export class HealthCareCompaniesEnrollment {
     () => HealthCareCompany,
     (healthCareCompany) => healthCareCompany.enrollments,
   )
-  @JoinColumn()
   healthCareCompany: HealthCareCompany;
+
+  @OneToOne(() => Student, (student) => student.healthCareCompany)
+  student: Student;
 
   @CreateDateColumn()
   createdDate: Date;

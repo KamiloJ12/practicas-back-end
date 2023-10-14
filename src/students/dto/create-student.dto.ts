@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
 import { IdentityDocument } from 'src/identity-documents/entities/identity-document.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export class CreateStudentDto {
   @IsNotEmpty()
@@ -19,7 +20,7 @@ export class CreateStudentDto {
 
   @IsNotEmpty()
   @IsString()
-  classSchedule: string;
+  classScheduleDocumentFile: string;
 
   @IsNotEmpty()
   @IsString()
@@ -49,4 +50,7 @@ export class CreateStudentDto {
 
   @IsNotEmpty()
   identityDocument: IdentityDocument;
+
+  @IsNotEmpty()
+  user: User;
 }
