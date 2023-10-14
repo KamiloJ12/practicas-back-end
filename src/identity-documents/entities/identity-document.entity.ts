@@ -1,4 +1,5 @@
 import { DocumentType } from 'src/document-type/entities/document-type.entity';
+import { Municipality } from 'src/municipalities/entities/municipality.entity';
 
 import {
   Entity,
@@ -24,8 +25,11 @@ export class IdentityDocument {
   @Column()
   issuancePlace: string; // fecha de emision
 
-  @Column()
-  documentFile: string; // documento => pdf
+  @ManyToOne(
+    () => Municipality,
+    (municipality) => municipality.identityDocuments,
+  )
+  documentFile: Municipality; // documento => pdf
 
   @ManyToOne(() => DocumentType, (documentType) => documentType.documents)
   documentType: DocumentType;
