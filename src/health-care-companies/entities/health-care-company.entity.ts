@@ -1,7 +1,9 @@
+import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -15,6 +17,13 @@ export class HealthCareCompany {
 
   @Column()
   nit: string;
+
+  @OneToMany(
+    () => HealthCareCompaniesEnrollment,
+    (healthCareCompaniesEnrollment) =>
+      healthCareCompaniesEnrollment.healthCareCompany,
+  )
+  enrollments: HealthCareCompaniesEnrollment[];
 
   @DeleteDateColumn()
   deletedAt: Date;

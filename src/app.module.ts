@@ -21,6 +21,7 @@ import { CountriesModule } from './countries/countries.module';
 import { DepartamentsModule } from './departaments/departaments.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
+import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enrollment/health-care-companies-enrollment.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { HealthCareCompaniesModule } from './health-care-companies/health-care-c
     DepartamentsModule,
     MunicipalitiesModule,
     HealthCareCompaniesModule,
+    HealthCareCompaniesEnrollmentModule,
   ],
   controllers: [AppController],
   providers: [
