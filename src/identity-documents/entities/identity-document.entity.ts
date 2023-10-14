@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -27,6 +29,12 @@ export class IdentityDocument {
 
   @ManyToOne(() => DocumentType, (documentType) => documentType.documents)
   documentType: DocumentType;
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

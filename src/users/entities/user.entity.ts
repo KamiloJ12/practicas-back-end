@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   OneToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -32,7 +34,12 @@ export class User {
   @OneToOne(() => Student, (student) => student.user)
   student: Student;
 
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
+
   @DeleteDateColumn()
-  @Exclude()
   deletedAt: Date;
 }

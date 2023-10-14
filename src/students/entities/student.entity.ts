@@ -8,6 +8,8 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Departament } from 'src/departaments/entities/departament.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
@@ -65,6 +67,12 @@ export class Student {
   @ManyToOne(() => Municipality, (municipality) => municipality.students)
   @JoinColumn()
   residenceMunicipality: Municipality;
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

@@ -3,11 +3,13 @@ import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import { Student } from 'src/students/entities/student.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -18,9 +20,6 @@ export class Departament {
   @Column()
   name: string;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @ManyToOne(() => Country, (country) => country.departaments)
   country: Country;
 
@@ -28,5 +27,14 @@ export class Departament {
   students: Student[];
 
   @OneToMany(() => Municipality, (municipality) => municipality.departament)
-  public municipalities: Municipality[];
+  municipalities: Municipality[];
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

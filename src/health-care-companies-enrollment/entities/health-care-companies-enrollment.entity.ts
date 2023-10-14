@@ -1,11 +1,13 @@
 import { HealthCareCompany } from 'src/health-care-companies/entities/health-care-company.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -28,6 +30,12 @@ export class HealthCareCompaniesEnrollment {
   )
   @JoinColumn()
   healthCareCompany: HealthCareCompany;
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

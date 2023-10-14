@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -15,9 +17,15 @@ export class DocumentType {
   @Column()
   name: string;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
-
   @OneToMany(() => IdentityDocument, (document) => document.documentType)
   documents: IdentityDocument[];
+
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
