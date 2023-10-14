@@ -20,6 +20,7 @@ import { DocumentTypeModule } from './document-type/document-type.module';
 import { CountriesModule } from './countries/countries.module';
 import { DepartamentsModule } from './departaments/departaments.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
+import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { MunicipalitiesModule } from './municipalities/municipalities.module';
     CountriesModule,
     DepartamentsModule,
     MunicipalitiesModule,
+    HealthCareCompaniesModule,
   ],
   controllers: [AppController],
   providers: [
