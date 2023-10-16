@@ -1,4 +1,4 @@
-import { Departament } from 'src/departaments/entities/department.entity';
+import { Department } from 'src/departaments/entities/department.entity';
 import { IdentityDocument } from 'src/identity-documents/entities/identity-document.entity';
 import { Student } from 'src/students/entities/student.entity';
 import {
@@ -20,8 +20,8 @@ export class Municipality {
   @Column()
   name: string;
 
-  @ManyToOne(() => Departament, (departament) => departament.municipalities)
-  departament: Departament;
+  @ManyToOne(() => Department, (department) => department.municipalities)
+  departament: Department;
 
   @OneToMany(() => Student, (student) => student.residenceMunicipality)
   students: Student[];

@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Departament } from 'src/departaments/entities/department.entity';
+import { Department } from 'src/departaments/entities/department.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
 
@@ -64,9 +64,9 @@ export class Student {
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Departament, (departament) => departament.students)
+  @ManyToOne(() => Department, (department) => department.students)
   @JoinColumn()
-  residenceDepartament: Departament;
+  residenceDepartament: Department;
 
   @ManyToOne(() => Municipality, (municipality) => municipality.students)
   @JoinColumn()

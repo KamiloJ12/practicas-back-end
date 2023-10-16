@@ -1,4 +1,4 @@
-import { Departament } from 'src/departaments/entities/department.entity';
+import { Department } from 'src/departaments/entities/department.entity';
 import {
   Column,
   CreateDateColumn,
@@ -17,8 +17,8 @@ export class Country {
   @Column()
   name: string;
 
-  @OneToMany(() => Departament, (departament) => departament.country)
-  departaments: Departament[];
+  @OneToMany(() => Department, (department) => department.country)
+  departaments: Department[];
 
   @CreateDateColumn()
   createdDate: Date;

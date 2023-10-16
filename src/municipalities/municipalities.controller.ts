@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { MunicipalitiesService } from './municipalities.service';
 import { CreateMunicipalityDto } from './dto/create-municipality.dto';
@@ -27,6 +28,15 @@ export class MunicipalitiesController {
   @Get()
   findAll() {
     return this.municipalitiesService.findAll();
+  }
+
+  @Get('suggestion')
+  getSuggestions(
+    @Query('name') name: string,
+    @Query('department') department: string,
+  ) {
+    console.log(department);
+    return this.municipalitiesService.getSuggestions(name, department);
   }
 
   @Roles(Role.Coordinator)

@@ -30,12 +30,12 @@ export class DepartamentsController {
     return this.departmentsService.findAll();
   }
 
-  @Get('name/:name')
+  @Get('suggestion')
   getSuggestions(
-    @Param('name') name: string,
-    @Query('country') country: number,
+    @Query('name') name: string,
+    @Query('country') country: string,
   ) {
-    return this.departmentsService.findByName(name, country);
+    return this.departmentsService.getSuggestions(name, country);
   }
 
   @Roles(Role.Coordinator)

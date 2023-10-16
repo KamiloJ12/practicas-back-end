@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { CountriesService } from './countries.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -29,8 +30,8 @@ export class CountriesController {
     return this.countriesService.findAll();
   }
 
-  @Get('name/:name')
-  getSuggestions(@Param('name') name: string) {
+  @Get('suggetions')
+  getSuggestions(@Query('name') name: string) {
     return this.countriesService.getSuggestions(name);
   }
 

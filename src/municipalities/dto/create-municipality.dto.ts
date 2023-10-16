@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Departament } from 'src/departaments/entities/department.entity';
+import { Department } from 'src/departaments/entities/department.entity';
 
 export class CreateMunicipalityDto {
   @IsNotEmpty()
@@ -7,5 +7,5 @@ export class CreateMunicipalityDto {
   name: string;
 
   @IsNotEmpty()
-  departament: Departament;
+  departament: Department;
 }

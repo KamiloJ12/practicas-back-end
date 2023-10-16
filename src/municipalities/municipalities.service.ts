@@ -27,6 +27,24 @@ export class MunicipalitiesService {
     return this.municipalyRepository.findBy({ id });
   }
 
+  getSuggestions(name: string, department: string) {
+    const lowerName = name.toLowerCase();
+
+    const query = this.municipalyRepository
+      .createQueryBuilder('municipality')
+      .leftJoinAndSelect('municipality.department', 'department')
+      .where('municipality.name LIKE :term', { term: `%${lowerName}%` });
+
+    if (department && department.trim().length != 0) {
+      const lowerDepartment = department.toLowerCase();
+      query.andWhere('department.name = :department', {
+        department: lowerDepartment,
+      });
+    }
+
+    return query.getMany();
+  }
+
   update(id: number, updateMunicipalityDto: UpdateMunicipalityDto) {
     return this.municipalyRepository.update(id, updateMunicipalityDto);
   }

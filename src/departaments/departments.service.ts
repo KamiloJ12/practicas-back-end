@@ -25,15 +25,19 @@ export class DepartmentsService {
     return this.departmentRepository.findOneBy({ id });
   }
 
-  findByName(name: string, country: number) {
+  getSuggestions(name: string, country: string) {
     const lowerName = name.toLowerCase();
 
     const query = this.departmentRepository
       .createQueryBuilder('department')
-      .where('LOWER(department.name) LIKE :term', { term: `%${lowerName}%` });
+      .leftJoinAndSelect('department.country', 'country')
+      .where('department.name LIKE :term', { term: `%${lowerName}%` });
 
-    if (!country) {
-      query.andWhere('LOWER(department.country.id) = :country', { country });
+    if (country && country.trim().length != 0) {
+      const lowerCountry = country.toLowerCase();
+      query.andWhere('country.name = :country', {
+        country: lowerCountry,
+      });
     }
 
     return query.getMany();
