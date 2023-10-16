@@ -28,15 +28,12 @@ export class AuthService {
 
   async signUp(signUpDto: SignUpDto) {
     try {
-      const hashedPassword: string = await bcrypt.hash(signUpDto.password, 10);
       const role = signUpDto.email.endsWith('@ufps.edu.co')
         ? Role.Student
         : Role.Company;
-
       const user = await this.usersService.create({
         ...signUpDto,
         role,
-        password: hashedPassword,
       });
       this.emailConfirmationService.sendVerificationLink(signUpDto.email);
       return this.login(user);
@@ -52,6 +49,7 @@ export class AuthService {
     try {
       const user = await this.usersService.findOneByEmail(email);
       const isMatch = await bcrypt.compare(password, user.password);
+
       if (user && isMatch) {
         return user;
       }
@@ -77,9 +75,7 @@ export class AuthService {
 
     const payload = { email: user.email, id: user.id };
     const token = this.jwtService.sign(payload);
-    const url = `${this.configService.get(
-      'RESET_PASSWORD_URL',
-    )}?token=${token}`;
+    const url = `${this.configService.get('RESET_PASSWORD_URL')}/${token}`;
 
     return this.emailService.sendEmailResetPassword(
       user.email,
@@ -93,12 +89,12 @@ export class AuthService {
     return this.usersService.update(id, { password: hashedPassword });
   }
 
-  async resetPasswordToken(token: string, newPasswrod: string) {
+  async resetPasswordToken(token: string, newPassword: string) {
     try {
+      console.log(token, newPassword);
       const payload = await this.jwtService.verify(token);
-
       if (typeof payload === 'object' && 'email' in payload) {
-        this.resetPassword(payload.id, newPasswrod);
+        this.resetPassword(payload.id, newPassword);
       } else {
         throw new BadRequestException();
       }
@@ -106,6 +102,7 @@ export class AuthService {
       if (error?.name === 'TokenExpiredError') {
         throw new BadRequestException('Email confirmation token expired');
       }
+      console.log(error);
       throw new BadRequestException('Bad confirmation token');
     }
   }

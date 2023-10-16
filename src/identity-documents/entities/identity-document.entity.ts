@@ -23,10 +23,10 @@ export class IdentityDocument {
     () => Municipality,
     (municipality) => municipality.identityDocuments,
   )
-  issuanceDate: Municipality; // fecha de emision
+  issuancePlace: Municipality; // fecha de emision
 
   @Column()
-  issuancePlace: string; // fecha de emision
+  issuanceDate: Date; // fecha de emision
 
   @Column()
   documentFile: string; // documento => pdf

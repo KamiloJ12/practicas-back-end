@@ -18,7 +18,7 @@ import { StudentsModule } from './students/students.module';
 import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { CountriesModule } from './countries/countries.module';
-import { DepartamentsModule } from './departaments/departaments.module';
+import { DepartamentsModule } from './departaments/departments.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
 import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enrollment/health-care-companies-enrollment.module';

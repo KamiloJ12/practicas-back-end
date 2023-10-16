@@ -23,7 +23,7 @@ export class HealthCareCompaniesEnrollment {
   affiliationDate: Date;
 
   @Column()
-  document: string;
+  documentHealthFile: string;
 
   @ManyToOne(
     () => HealthCareCompany,

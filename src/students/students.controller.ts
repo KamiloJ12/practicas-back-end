@@ -8,17 +8,32 @@ import {
   Delete,
   ParseIntPipe,
   Req,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Post()
-  create(@Req() req, @Body() createStudentDto: CreateStudentDto) {
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'avatar' }, { name: 'background' }]),
+  )
+  create(
+    @UploadedFiles()
+    files: {
+      avatar: Express.Multer.File;
+      background: Express.Multer.File;
+    },
+    @Req() req,
+    @Body() createStudentDto: CreateStudentDto,
+  ) {
+    console.log(files);
     return this.studentsService.create(createStudentDto, req.user);
   }
 

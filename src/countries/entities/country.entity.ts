@@ -1,4 +1,4 @@
-import { Departament } from 'src/departaments/entities/departament.entity';
+import { Departament } from 'src/departaments/entities/department.entity';
 import {
   Column,
   CreateDateColumn,

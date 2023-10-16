@@ -1,4 +1,4 @@
-import { Departament } from 'src/departaments/entities/departament.entity';
+import { Departament } from 'src/departaments/entities/department.entity';
 import { IdentityDocument } from 'src/identity-documents/entities/identity-document.entity';
 import { Student } from 'src/students/entities/student.entity';
 import {

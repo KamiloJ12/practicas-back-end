@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Departament {
+export class Department {
   @PrimaryGeneratedColumn()
   id: number;
 

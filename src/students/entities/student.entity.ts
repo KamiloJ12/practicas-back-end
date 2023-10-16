@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Departament } from 'src/departaments/entities/departament.entity';
+import { Departament } from 'src/departaments/entities/department.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
 
@@ -21,25 +21,28 @@ export class Student {
   id: number;
 
   @Column()
-  firtName: string; // Nombres
+  firstName: string; // Nombres
 
   @Column()
   lastName: string; // Apellidos
 
-  @Column({ unique: true })
-  studentCode: number; // Codigo
-
-  @Column()
-  classSchedule: string; // horario de clase -> documento
-
   @Column()
   gender: string;
+
+  @Column()
+  birthdate: Date;
 
   @Column()
   address: string; // dirección
 
   @Column({ type: 'bigint' })
   phoneNumber: number; // dirección de telefono
+
+  @Column({ unique: true })
+  studentCode: number; // Codigo
+
+  @Column()
+  classScheduleFile: string; // horario de clase -> documento
 
   @Column()
   currentSemester: number; // semetre actual

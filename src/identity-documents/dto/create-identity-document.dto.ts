@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { DocumentType } from 'src/document-type/entities/document-type.entity';
+import { Municipality } from 'src/municipalities/entities/municipality.entity';
 
 export class CreateIdentityDocumentDto {
   @IsNotEmpty()
@@ -16,6 +17,5 @@ export class CreateIdentityDocumentDto {
   issuanceDate: Date; // fecha de emision
 
   @IsNotEmpty()
-  @IsString()
-  issuancePlace: string; // fecha de emision
+  issuancePlace: Municipality; // lugar de emision
 }

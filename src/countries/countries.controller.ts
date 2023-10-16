@@ -29,6 +29,11 @@ export class CountriesController {
     return this.countriesService.findAll();
   }
 
+  @Get('name/:name')
+  getSuggestions(@Param('name') name: string) {
+    return this.countriesService.getSuggestions(name);
+  }
+
   @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
