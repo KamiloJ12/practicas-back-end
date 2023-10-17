@@ -26,7 +26,7 @@ export class Department {
   @OneToMany(() => Student, (student) => student.residenceDepartament)
   students: Student[];
 
-  @OneToMany(() => Municipality, (municipality) => municipality.departament)
+  @OneToMany(() => Municipality, (municipality) => municipality.department)
   municipalities: Municipality[];
 
   @CreateDateColumn()

@@ -29,6 +29,7 @@ export class DocumentTypeController {
     return this.documentTypeService.findAll();
   }
 
+  @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.documentTypeService.findOneById(id);

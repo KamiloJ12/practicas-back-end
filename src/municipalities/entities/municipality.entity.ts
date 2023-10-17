@@ -21,7 +21,7 @@ export class Municipality {
   name: string;
 
   @ManyToOne(() => Department, (department) => department.municipalities)
-  departament: Department;
+  department: Department;
 
   @OneToMany(() => Student, (student) => student.residenceMunicipality)
   students: Student[];

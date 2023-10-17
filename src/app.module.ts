@@ -35,6 +35,15 @@ import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enr
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
+      ssl: process.env.DB_SSL === 'true',
+      extra: {
+        ssl:
+          process.env.DB_SSL === 'true'
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
     }),
     UsersModule,
     AuthModule,
