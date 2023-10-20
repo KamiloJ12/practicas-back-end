@@ -15,7 +15,7 @@ export class EmailConfirmationController {
   }
 
   @Post('resend-confirmation-link')
-  async resendConfirmationLink(@Req() request) {
-    await this.emailConfirmationService.resendConfirmationLink(request.user.id);
+  async resendConfirmationLink(@Req() req) {
+    await this.emailConfirmationService.resendConfirmationLink(req.user.id);
   }
 }
