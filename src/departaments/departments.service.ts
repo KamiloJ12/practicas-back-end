@@ -3,7 +3,7 @@ import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Department } from './entities/department.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class DepartmentsService {
@@ -17,30 +17,40 @@ export class DepartmentsService {
     return this.departmentRepository.save(country);
   }
 
-  findAll() {
-    return this.departmentRepository.find();
+  async findAll(
+    offset?: number,
+    limit?: number,
+    searchQuery?: string,
+    country?: string,
+  ) {
+    const where = searchQuery
+      ? {
+          name: Like(`%${searchQuery.toLowerCase()}%`),
+        }
+      : {};
+
+    if (country) {
+      where['country.name'] = Like(`%${country.toLowerCase()}%`);
+    }
+
+    const [items, count] = await this.departmentRepository.findAndCount({
+      where,
+      order: {
+        name: 'ASC',
+      },
+      skip: offset,
+      take: limit,
+      relations: ['country'], // Carga la relación "country"
+    });
+
+    return {
+      items,
+      count,
+    };
   }
 
   findOne(id: number) {
     return this.departmentRepository.findOneBy({ id });
-  }
-
-  getSuggestions(name: string, country: string) {
-    const lowerName = name.toLowerCase();
-
-    const query = this.departmentRepository
-      .createQueryBuilder('department')
-      .leftJoinAndSelect('department.country', 'country')
-      .where('department.name LIKE :term', { term: `%${lowerName}%` });
-
-    if (country && country.trim().length != 0) {
-      const lowerCountry = country.toLowerCase();
-      query.andWhere('country.name = :country', {
-        country: lowerCountry,
-      });
-    }
-
-    return query.getMany();
   }
 
   update(id: number, updateDepartmentDto: UpdateDepartmentDto) {

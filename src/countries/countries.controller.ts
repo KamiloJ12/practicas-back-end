@@ -26,13 +26,12 @@ export class CountriesController {
   }
 
   @Get()
-  findAll() {
-    return this.countriesService.findAll();
-  }
-
-  @Get('suggetions')
-  getSuggestions(@Query('name') name: string) {
-    return this.countriesService.getSuggestions(name);
+  async getCountries(
+    @Query('query') query: string,
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.countriesService.findAll(offset, limit, query);
   }
 
   @Roles(Role.Coordinator)

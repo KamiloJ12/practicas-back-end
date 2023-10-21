@@ -39,9 +39,9 @@ export class AuthService {
       return this.login(user);
     } catch (error) {
       if (error?.code === '23505') {
-        throw new BadRequestException('User with that email already exists');
+        throw new BadRequestException('El email ya se encuentra registrado');
       }
-      throw new InternalServerErrorException('Please check server logs');
+      throw new InternalServerErrorException('Error interno en el servidor');
     }
   }
 
@@ -70,7 +70,7 @@ export class AuthService {
   async requestPasswordReset(email: string): Promise<void> {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
-      throw new NotFoundException('user with this email not found');
+      throw new NotFoundException('El email no se encuentra registrado');
     }
 
     const payload = { email: user.email, id: user.id };
@@ -100,10 +100,11 @@ export class AuthService {
       }
     } catch (error) {
       if (error?.name === 'TokenExpiredError') {
-        throw new BadRequestException('Email confirmation token expired');
+        throw new BadRequestException(
+          'El token de confirmacion del email ha expirado',
+        );
       }
-      console.log(error);
-      throw new BadRequestException('Bad confirmation token');
+      throw new BadRequestException('El token es incorrecto');
     }
   }
 }

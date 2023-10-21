@@ -24,9 +24,7 @@ export class EmailConfirmationService {
     });
     const webSiteName = this.configService.get('WEB_SITE_NAME');
 
-    const url = `${this.configService.get(
-      'EMAIL_CONFIRMATION_URL',
-    )}?token=${token}`;
+    const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}/${token}`;
 
     return this.emailService.sendEmailConfirmation(
       webSiteName,

@@ -26,16 +26,13 @@ export class DepartamentsController {
   }
 
   @Get()
-  findAll() {
-    return this.departmentsService.findAll();
-  }
-
-  @Get('suggestion')
-  getSuggestions(
-    @Query('name') name: string,
+  findAll(
+    @Query('query') query: string,
+    @Query('offset') offset: number,
+    @Query('limit') limit: number,
     @Query('country') country: string,
   ) {
-    return this.departmentsService.getSuggestions(name, country);
+    return this.departmentsService.findAll(offset, limit, query, country);
   }
 
   @Roles(Role.Coordinator)
