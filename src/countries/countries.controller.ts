@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  Query,
 } from '@nestjs/common';
 import { CountriesService } from './countries.service';
 import { CreateCountryDto } from './dto/create-country.dto';
@@ -26,18 +25,20 @@ export class CountriesController {
   }
 
   @Get()
-  async getCountries(
-    @Query('query') query: string,
-    @Query('offset') offset: number,
-    @Query('limit') limit: number,
-  ) {
-    return this.countriesService.findAll(offset, limit, query);
+  getCountries() {
+    return this.countriesService.findAll();
   }
 
   @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.countriesService.findOne(id);
+  }
+
+  @Roles(Role.Coordinator)
+  @Get('name/:name')
+  findOneByName(@Param('name') name: string) {
+    return this.countriesService.findByName(name);
   }
 
   @Roles(Role.Coordinator)

@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   ParseIntPipe,
-  Query,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
@@ -26,19 +25,20 @@ export class DepartamentsController {
   }
 
   @Get()
-  findAll(
-    @Query('query') query: string,
-    @Query('offset') offset: number,
-    @Query('limit') limit: number,
-    @Query('country') country: string,
-  ) {
-    return this.departmentsService.findAll(offset, limit, query, country);
+  findAll() {
+    return this.departmentsService.findAll();
   }
 
   @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findOne(id);
+  }
+
+  @Roles(Role.Coordinator)
+  @Get('name/:name')
+  findOneByName(@Param('name') name: string) {
+    return this.departmentsService.findOneByName(name);
   }
 
   @Roles(Role.Coordinator)

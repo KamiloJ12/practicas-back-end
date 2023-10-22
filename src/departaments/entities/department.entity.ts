@@ -20,7 +20,7 @@ export class Department {
   @Column()
   name: string;
 
-  @ManyToOne(() => Country, (country) => country.departaments)
+  @ManyToOne(() => Country, (country) => country.departments)
   country: Country;
 
   @OneToMany(() => Student, (student) => student.residenceDepartament)

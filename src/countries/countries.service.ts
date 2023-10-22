@@ -30,30 +30,24 @@ export class CountriesService {
     }
   }
 
-  async findAll(offset?: number, limit?: number, searchQuery?: string) {
-    const where = searchQuery
-      ? {
-          name: Like(`%${searchQuery.toLowerCase()}%`),
-        }
-      : {};
-
-    const [items, count] = await this.countriesRepository.findAndCount({
-      where,
-      order: {
-        name: 'ASC',
-      },
-      skip: offset,
-      take: limit,
-    });
-
-    return {
-      items,
-      count,
-    };
+  findAll() {
+    return this.countriesRepository.find();
   }
 
   findOne(id: number) {
-    return this.countriesRepository.findBy({ id });
+    return this.countriesRepository.findOne({
+      where: { id },
+      relations: ['departments'],
+    });
+  }
+
+  findByName(name: string) {
+    return this.countriesRepository.find({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+      relations: ['departments'],
+    });
   }
 
   update(id: number, updateCountryDto: UpdateCountryDto) {

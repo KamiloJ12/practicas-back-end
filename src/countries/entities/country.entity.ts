@@ -18,7 +18,7 @@ export class Country {
   name: string;
 
   @OneToMany(() => Department, (department) => department.country)
-  departaments: Department[];
+  departments: Department[];
 
   @CreateDateColumn()
   createdDate: Date;

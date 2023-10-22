@@ -17,40 +17,20 @@ export class DepartmentsService {
     return this.departmentRepository.save(country);
   }
 
-  async findAll(
-    offset?: number,
-    limit?: number,
-    searchQuery?: string,
-    country?: string,
-  ) {
-    const where = searchQuery
-      ? {
-          name: Like(`%${searchQuery.toLowerCase()}%`),
-        }
-      : {};
-
-    if (country) {
-      where['country.name'] = Like(`%${country.toLowerCase()}%`);
-    }
-
-    const [items, count] = await this.departmentRepository.findAndCount({
-      where,
-      order: {
-        name: 'ASC',
-      },
-      skip: offset,
-      take: limit,
-      relations: ['country'], // Carga la relación "country"
-    });
-
-    return {
-      items,
-      count,
-    };
+  findAll() {
+    return this.departmentRepository.find();
   }
 
   findOne(id: number) {
     return this.departmentRepository.findOneBy({ id });
+  }
+
+  findOneByName(name: string) {
+    return this.departmentRepository.find({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+    });
   }
 
   update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
