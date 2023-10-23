@@ -4,6 +4,7 @@ import { Transform } from 'class-transformer';
 export class SignInDto {
   @IsEmail()
   email: string;
+
   @IsString()
   @MinLength(6)
   @Transform(({ value }) => value.trim())

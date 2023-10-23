@@ -8,20 +8,23 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
+
 import { AuthModule } from './auth/auth.module';
-import { EmailModule } from './email/email.module';
-import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
-import { StudentsModule } from './students/students.module';
-import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
-import { DocumentTypeModule } from './document-type/document-type.module';
 import { CountriesModule } from './countries/countries.module';
 import { DepartamentsModule } from './departaments/departments.module';
-import { MunicipalitiesModule } from './municipalities/municipalities.module';
-import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
+import { DevelopmentAreasModule } from './development_areas/development_areas.module';
+import { DocumentTypeModule } from './document-type/document-type.module';
+import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
+import { EmailModule } from './email/email.module';
+import { FrameworksModule } from './frameworks/frameworks.module';
 import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enrollment/health-care-companies-enrollment.module';
+import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
+import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
+import { MunicipalitiesModule } from './municipalities/municipalities.module';
+import { ProgrammingLanguagesModule } from './programming-languages/programming-languages.module';
+import { StudentsModule } from './students/students.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -57,6 +60,9 @@ import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enr
     MunicipalitiesModule,
     HealthCareCompaniesModule,
     HealthCareCompaniesEnrollmentModule,
+    FrameworksModule,
+    ProgrammingLanguagesModule,
+    DevelopmentAreasModule,
   ],
   controllers: [AppController],
   providers: [

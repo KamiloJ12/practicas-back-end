@@ -31,7 +31,6 @@ export class HealthCareCompaniesController {
     return this.healthCareCompaniesService.findAll();
   }
 
-  @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.healthCareCompaniesService.findOne(id);

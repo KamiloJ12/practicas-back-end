@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateHealthCareCompaniesEnrollmentDto } from './dto/create-health-care-companies-enrollment.dto';
 import { UpdateHealthCareCompaniesEnrollmentDto } from './dto/update-health-care-companies-enrollment.dto';
 import { HealthCareCompaniesEnrollment } from './entities/health-care-companies-enrollment.entity';
@@ -12,16 +16,25 @@ export class HealthCareCompaniesEnrollmentService {
     private healthCareCompaniesEnrollmentRepository: Repository<HealthCareCompaniesEnrollment>,
   ) {}
 
-  create(
+  async create(
     createHealthCareCompaniesEnrollmentDto: CreateHealthCareCompaniesEnrollmentDto,
   ) {
-    const healthCareCompaniesEnrollment =
-      this.healthCareCompaniesEnrollmentRepository.create(
-        createHealthCareCompaniesEnrollmentDto,
+    try {
+      const healthCareCompaniesEnrollment =
+        this.healthCareCompaniesEnrollmentRepository.create(
+          createHealthCareCompaniesEnrollmentDto,
+        );
+      return await this.healthCareCompaniesEnrollmentRepository.save(
+        healthCareCompaniesEnrollment,
       );
-    return this.healthCareCompaniesEnrollmentRepository.save(
-      healthCareCompaniesEnrollment,
-    );
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new BadRequestException(
+          'El estudiante ya se tiene una eps registrada',
+        );
+      }
+      throw new InternalServerErrorException('Error interno en el servidor');
+    }
   }
 
   findAll() {

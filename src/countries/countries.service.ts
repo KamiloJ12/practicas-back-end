@@ -26,12 +26,21 @@ export class CountriesService {
       if (error.code === '23505') {
         throw new BadRequestException('El pais ya se encuentra registrado');
       }
-      throw new InternalServerErrorException('Error interno en el servidor+');
+      throw new InternalServerErrorException('Error interno en el servidor');
     }
   }
 
   findAll() {
     return this.countriesRepository.find();
+  }
+
+  findByName(name: string) {
+    return this.countriesRepository.find({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+      relations: ['departments'],
+    });
   }
 
   findOne(id: number) {
@@ -41,8 +50,8 @@ export class CountriesService {
     });
   }
 
-  findByName(name: string) {
-    return this.countriesRepository.find({
+  findOneByName(name: string) {
+    return this.countriesRepository.findOne({
       where: {
         name: Like(`%${name.toLowerCase()}%`),
       },

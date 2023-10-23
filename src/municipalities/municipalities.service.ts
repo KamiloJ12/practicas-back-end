@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateMunicipalityDto } from './dto/create-municipality.dto';
 import { UpdateMunicipalityDto } from './dto/update-municipality.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Municipality } from './entities/municipality.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 @Injectable()
 export class MunicipalitiesService {
@@ -12,37 +16,44 @@ export class MunicipalitiesService {
     private municipalyRepository: Repository<Municipality>,
   ) {}
 
-  create(createMunicipalityDto: CreateMunicipalityDto) {
-    const municipality = this.municipalyRepository.create(
-      createMunicipalityDto,
-    );
-    return this.municipalyRepository.save(municipality);
+  async create(createMunicipalityDto: CreateMunicipalityDto) {
+    try {
+      const municipality = this.municipalyRepository.create(
+        createMunicipalityDto,
+      );
+      return await this.municipalyRepository.save(municipality);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new BadRequestException(
+          'El municipio ya se encuentra registrado',
+        );
+      }
+      throw new InternalServerErrorException('Error interno en el servidor');
+    }
   }
 
   findAll() {
     return this.municipalyRepository.find();
   }
 
+  findByName(name: string) {
+    return this.municipalyRepository.find({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+    });
+  }
+
   findOne(id: number) {
     return this.municipalyRepository.findBy({ id });
   }
 
-  getSuggestions(name: string, department: string) {
-    const lowerName = name.toLowerCase();
-
-    const query = this.municipalyRepository
-      .createQueryBuilder('municipality')
-      .leftJoinAndSelect('municipality.department', 'department')
-      .where('municipality.name LIKE :term', { term: `%${lowerName}%` });
-
-    if (department && department.trim().length != 0) {
-      const lowerDepartment = department.toLowerCase();
-      query.andWhere('department.name = :department', {
-        department: lowerDepartment,
-      });
-    }
-
-    return query.getMany();
+  findOneByName(name: string) {
+    return this.municipalyRepository.findOne({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+    });
   }
 
   update(id: number, updateMunicipalityDto: UpdateMunicipalityDto) {

@@ -31,7 +31,7 @@ export class HealthCareCompaniesEnrollment {
   )
   healthCareCompany: HealthCareCompany;
 
-  @OneToOne(() => Student, (student) => student.healthCareCompany)
+  @OneToOne(() => Student, (student) => student.healthCareCompanyEnrollment)
   student: Student;
 
   @CreateDateColumn()

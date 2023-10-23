@@ -15,6 +15,8 @@ import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('students')
 export class StudentsController {
@@ -37,16 +39,19 @@ export class StudentsController {
     return this.studentsService.create(createStudentDto, req.user);
   }
 
+  @Roles(Role.Coordinator)
   @Get()
   findAll() {
     return this.studentsService.findAll();
   }
 
+  @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.studentsService.findOne(id);
   }
 
+  @Roles(Role.Coordinator)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -55,6 +60,7 @@ export class StudentsController {
     return this.studentsService.update(id, updateStudentDto);
   }
 
+  @Roles(Role.Coordinator)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.studentsService.remove(id);

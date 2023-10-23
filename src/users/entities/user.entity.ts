@@ -1,10 +1,8 @@
-import { Student } from 'src/students/entities/student.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   DeleteDateColumn,
-  OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,9 +26,6 @@ export class User {
 
   @Column({ default: false })
   isEmailConfirmed: boolean;
-
-  @OneToOne(() => Student, (student) => student.user)
-  student: Student;
 
   @CreateDateColumn()
   createdDate: Date;

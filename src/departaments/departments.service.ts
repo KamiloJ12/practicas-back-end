@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,13 +16,30 @@ export class DepartmentsService {
     private departmentRepository: Repository<Department>,
   ) {}
 
-  create(createDepartmentDto: CreateDepartmentDto) {
-    const country = this.departmentRepository.create(createDepartmentDto);
-    return this.departmentRepository.save(country);
+  async create(createDepartmentDto: CreateDepartmentDto) {
+    try {
+      const country = this.departmentRepository.create(createDepartmentDto);
+      return await this.departmentRepository.save(country);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new BadRequestException(
+          'El departamento ya se encuentra registrado',
+        );
+      }
+      throw new InternalServerErrorException('Error interno en el servidor');
+    }
   }
 
   findAll() {
     return this.departmentRepository.find();
+  }
+
+  findByName(name: string) {
+    return this.departmentRepository.find({
+      where: {
+        name: Like(`%${name.toLowerCase()}%`),
+      },
+    });
   }
 
   findOne(id: number) {
@@ -26,7 +47,7 @@ export class DepartmentsService {
   }
 
   findOneByName(name: string) {
-    return this.departmentRepository.find({
+    return this.departmentRepository.findOne({
       where: {
         name: Like(`%${name.toLowerCase()}%`),
       },

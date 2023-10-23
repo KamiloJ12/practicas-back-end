@@ -59,4 +59,6 @@ export class CreateStudentDto {
   @Transform(({ value }) => JSON.parse(value))
   @Type(() => IdentityDocument)
   identityDocument: IdentityDocument;
+
+  //TODO: Falta modificar dto
 }

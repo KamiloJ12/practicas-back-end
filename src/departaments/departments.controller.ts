@@ -29,14 +29,17 @@ export class DepartamentsController {
     return this.departmentsService.findAll();
   }
 
-  @Roles(Role.Coordinator)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findOne(id);
   }
 
-  @Roles(Role.Coordinator)
   @Get('name/:name')
+  findByName(@Param('name') name: string) {
+    return this.departmentsService.findByName(name);
+  }
+
+  @Get('/department/name/:name')
   findOneByName(@Param('name') name: string) {
     return this.departmentsService.findOneByName(name);
   }

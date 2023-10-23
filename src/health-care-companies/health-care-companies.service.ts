@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateHealthCareCompanyDto } from './dto/create-health-care-company.dto';
 import { UpdateHealthCareCompanyDto } from './dto/update-health-care-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,11 +15,21 @@ export class HealthCareCompaniesService {
     @InjectRepository(HealthCareCompany)
     private healthCareCompanyRepository: Repository<HealthCareCompany>,
   ) {}
-  create(createHealthCareCompanyDto: CreateHealthCareCompanyDto) {
-    const healthCareCompany = this.healthCareCompanyRepository.create(
-      createHealthCareCompanyDto,
-    );
-    return this.healthCareCompanyRepository.save(healthCareCompany);
+
+  async create(createHealthCareCompanyDto: CreateHealthCareCompanyDto) {
+    try {
+      const healthCareCompany = this.healthCareCompanyRepository.create(
+        createHealthCareCompanyDto,
+      );
+      return await this.healthCareCompanyRepository.save(healthCareCompany);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new BadRequestException(
+          'El framework ya se encuentra registrado',
+        );
+      }
+      throw new InternalServerErrorException('Error interno en el servidor');
+    }
   }
 
   findAll() {

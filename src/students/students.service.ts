@@ -29,7 +29,18 @@ export class StudentsService {
   }
 
   findOne(id: number) {
-    return this.studentsRepository.findOneBy({ id });
+    return this.studentsRepository.findOne({
+      where: { id },
+      relations: [
+        'residenceDepartament',
+        'residenceMunicipality',
+        'healthCareCompanyEnrollment',
+        'healthCareCompanyEnrollment.healthCareCompany',
+        'programmingLanguages',
+        'frameworks',
+        'developmentArea',
+      ],
+    });
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {

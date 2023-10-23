@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
 import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,8 +17,19 @@ export class DocumentTypeService {
   ) {}
 
   async create(createDocumentTypeDto: CreateDocumentTypeDto) {
-    const newUser = this.documentTypeRepository.create(createDocumentTypeDto);
-    return await this.documentTypeRepository.save(newUser);
+    try {
+      const documentType = this.documentTypeRepository.create(
+        createDocumentTypeDto,
+      );
+      return await this.documentTypeRepository.save(documentType);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new BadRequestException(
+          'El departamento ya se encuentra registrado',
+        );
+      }
+      throw new InternalServerErrorException('Error interno en el servidor');
+    }
   }
 
   findAll() {
