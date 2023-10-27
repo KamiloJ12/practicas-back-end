@@ -9,13 +9,12 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { CountriesService } from './countries.service';
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-country.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/auth/enums/role.enum';
-import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Paises')
+import { CreateCountryDto, UpdateCountryDto } from './dto';
+
+import { Roles, Public } from 'src/auth/decorators';
+import { Role } from 'src/auth/enums/role.enum';
+
 @Controller('countries')
 export class CountriesController {
   constructor(private readonly countriesService: CountriesService) {}
@@ -26,24 +25,22 @@ export class CountriesController {
     return this.countriesService.create(createCountryDto);
   }
 
+  @Public()
   @Get()
   getCountries() {
     return this.countriesService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.countriesService.findOne(id);
   }
 
+  @Public()
   @Get('name/:name')
   findOneByName(@Param('name') name: string) {
     return this.countriesService.findByName(name);
-  }
-
-  @Get('country/name/:name')
-  findByName(@Param('name') name: string) {
-    return this.countriesService.findOneByName(name);
   }
 
   @Roles(Role.Coordinator)

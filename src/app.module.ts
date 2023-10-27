@@ -25,6 +25,7 @@ import { MunicipalitiesModule } from './municipalities/municipalities.module';
 import { ProgrammingLanguagesModule } from './programming-languages/programming-languages.module';
 import { StudentsModule } from './students/students.module';
 import { UsersModule } from './users/users.module';
+import { AffiliationTypeModule } from './affiliation-type/affiliation-type.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { UsersModule } from './users/users.module';
     FrameworksModule,
     ProgrammingLanguagesModule,
     DevelopmentAreasModule,
+    AffiliationTypeModule,
   ],
   controllers: [AppController],
   providers: [

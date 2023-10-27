@@ -3,11 +3,15 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateHealthCareCompaniesEnrollmentDto } from './dto/create-health-care-companies-enrollment.dto';
-import { UpdateHealthCareCompaniesEnrollmentDto } from './dto/update-health-care-companies-enrollment.dto';
-import { HealthCareCompaniesEnrollment } from './entities/health-care-companies-enrollment.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { HealthCareCompaniesEnrollment } from './entities/health-care-companies-enrollment.entity';
+
+import {
+  CreateHealthCareCompaniesEnrollmentDto,
+  UpdateHealthCareCompaniesEnrollmentDto,
+} from './dto';
 
 @Injectable()
 export class HealthCareCompaniesEnrollmentService {

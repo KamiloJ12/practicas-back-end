@@ -3,11 +3,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
-import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentType } from './entities/document-type.entity';
+
+import { CreateDocumentTypeDto, UpdateDocumentTypeDto } from './dto';
 
 @Injectable()
 export class DocumentTypeService {

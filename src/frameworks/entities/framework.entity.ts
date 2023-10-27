@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -31,7 +30,6 @@ export class Framework {
   programmingLanguage: ProgrammingLanguage;
 
   @ManyToMany(() => Student, (student: Student) => student.frameworks)
-  @JoinTable()
   students: Student[];
 
   @CreateDateColumn()

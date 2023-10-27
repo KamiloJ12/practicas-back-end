@@ -1,3 +1,4 @@
+import { AffiliationType } from 'src/affiliation-type/entities/affiliation-type.entity';
 import { HealthCareCompany } from 'src/health-care-companies/entities/health-care-company.entity';
 import { Student } from 'src/students/entities/student.entity';
 import {
@@ -16,8 +17,11 @@ export class HealthCareCompaniesEnrollment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  affiliationType: string;
+  @ManyToOne(
+    () => AffiliationType,
+    (affiliationType) => affiliationType.enrollments,
+  )
+  affiliationType: AffiliationType;
 
   @Column()
   affiliationDate: Date;

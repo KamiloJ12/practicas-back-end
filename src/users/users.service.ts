@@ -4,12 +4,16 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { Repository, UpdateResult } from 'typeorm';
+
+import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+
+import { User } from './entities/user.entity';
+
 import * as bcrypt from 'bcrypt';
+import * as csv from 'csv-parser';
 
 @Injectable()
 export class UsersService {
@@ -47,6 +51,20 @@ export class UsersService {
     const user = await this.usersRepository.findOneBy({ id });
     if (user) return user;
     throw new NotFoundException('User with this id does not exist');
+  }
+
+  async processCSV(file) {
+    if (!file) {
+      throw new BadRequestException('No se ha proporcionado un archivo.');
+    }
+    //const users: CreateUserDto[] = [];
+
+    file
+      .pipe(csv())
+      .on('data', (row) => {
+        console.log(row);
+      })
+      .on('end', async () => {});
   }
 
   findAll(): Promise<User[]> {

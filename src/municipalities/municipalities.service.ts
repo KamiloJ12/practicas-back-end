@@ -3,11 +3,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateMunicipalityDto } from './dto/create-municipality.dto';
-import { UpdateMunicipalityDto } from './dto/update-municipality.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Like, Repository, UpdateResult } from 'typeorm';
 import { Municipality } from './entities/municipality.entity';
-import { Like, Repository } from 'typeorm';
+
+import { CreateMunicipalityDto, UpdateMunicipalityDto } from './dto';
 
 @Injectable()
 export class MunicipalitiesService {
@@ -16,7 +16,9 @@ export class MunicipalitiesService {
     private municipalyRepository: Repository<Municipality>,
   ) {}
 
-  async create(createMunicipalityDto: CreateMunicipalityDto) {
+  async create(
+    createMunicipalityDto: CreateMunicipalityDto,
+  ): Promise<Municipality> {
     try {
       const municipality = this.municipalyRepository.create(
         createMunicipalityDto,
@@ -32,35 +34,36 @@ export class MunicipalitiesService {
     }
   }
 
-  findAll() {
-    return this.municipalyRepository.find();
+  async findAll(): Promise<Municipality[]> {
+    return await this.municipalyRepository.find();
   }
 
-  findByName(name: string) {
-    return this.municipalyRepository.find({
+  async findByName(name: string): Promise<Municipality[]> {
+    return await this.municipalyRepository.find({
       where: {
         name: Like(`%${name.toLowerCase()}%`),
       },
     });
   }
 
-  findOne(id: number) {
-    return this.municipalyRepository.findBy({ id });
+  async findOne(id: number): Promise<Municipality> {
+    return await this.municipalyRepository.findOneBy({ id });
   }
 
-  findOneByName(name: string) {
-    return this.municipalyRepository.findOne({
-      where: {
-        name: Like(`%${name.toLowerCase()}%`),
-      },
+  async findByDepartment(departmentId: number): Promise<Municipality[]> {
+    return await this.municipalyRepository.find({
+      where: { department: { id: departmentId } },
     });
   }
 
-  update(id: number, updateMunicipalityDto: UpdateMunicipalityDto) {
-    return this.municipalyRepository.update(id, updateMunicipalityDto);
+  async update(
+    id: number,
+    updateMunicipalityDto: UpdateMunicipalityDto,
+  ): Promise<UpdateResult> {
+    return await this.municipalyRepository.update(id, updateMunicipalityDto);
   }
 
-  remove(id: number) {
-    return this.municipalyRepository.softDelete({ id });
+  async remove(id: number): Promise<{ id: number } & Municipality> {
+    return await this.municipalyRepository.softRemove({ id });
   }
 }

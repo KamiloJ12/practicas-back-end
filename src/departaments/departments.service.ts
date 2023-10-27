@@ -3,20 +3,20 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Like, Repository, UpdateResult } from 'typeorm';
 import { Department } from './entities/department.entity';
-import { Like, Repository } from 'typeorm';
+
+import { CreateDepartmentDto, UpdateDepartmentDto } from './dto';
 
 @Injectable()
 export class DepartmentsService {
   constructor(
     @InjectRepository(Department)
-    private departmentRepository: Repository<Department>,
+    private readonly departmentRepository: Repository<Department>,
   ) {}
 
-  async create(createDepartmentDto: CreateDepartmentDto) {
+  async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
     try {
       const country = this.departmentRepository.create(createDepartmentDto);
       return await this.departmentRepository.save(country);
@@ -30,35 +30,36 @@ export class DepartmentsService {
     }
   }
 
-  findAll() {
-    return this.departmentRepository.find();
+  async findAll(): Promise<Department[]> {
+    return await this.departmentRepository.find();
   }
 
-  findByName(name: string) {
-    return this.departmentRepository.find({
+  async findByName(name: string): Promise<Department[]> {
+    return await this.departmentRepository.find({
       where: {
         name: Like(`%${name.toLowerCase()}%`),
       },
     });
   }
 
-  findOne(id: number) {
-    return this.departmentRepository.findOneBy({ id });
+  async findOne(id: number): Promise<Department> {
+    return await this.departmentRepository.findOneBy({ id });
   }
 
-  findOneByName(name: string) {
-    return this.departmentRepository.findOne({
-      where: {
-        name: Like(`%${name.toLowerCase()}%`),
-      },
+  async findByCountry(countryId: number): Promise<Department[]> {
+    return await this.departmentRepository.find({
+      where: { country: { id: countryId } },
     });
   }
 
-  update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
-    return this.departmentRepository.update(id, updateDepartmentDto);
+  async update(
+    id: number,
+    updateDepartmentDto: UpdateDepartmentDto,
+  ): Promise<UpdateResult> {
+    return await this.departmentRepository.update(id, updateDepartmentDto);
   }
 
-  remove(id: number) {
-    return this.departmentRepository.softRemove({ id });
+  async remove(id: number): Promise<{ id: number } & Department> {
+    return await this.departmentRepository.softRemove({ id });
   }
 }

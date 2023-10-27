@@ -9,9 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { MunicipalitiesService } from './municipalities.service';
-import { CreateMunicipalityDto } from './dto/create-municipality.dto';
-import { UpdateMunicipalityDto } from './dto/update-municipality.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+
+import { CreateMunicipalityDto, UpdateMunicipalityDto } from './dto';
+
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('municipalities')
@@ -24,24 +25,28 @@ export class MunicipalitiesController {
     return this.municipalitiesService.create(createMunicipalityDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.municipalitiesService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.municipalitiesService.findOne(id);
   }
 
+  @Public()
   @Get('name/:name')
   findByName(@Param('name') name: string) {
     return this.municipalitiesService.findByName(name);
   }
 
-  @Get('/department/name/:name')
-  findOneByName(@Param('name') name: string) {
-    return this.municipalitiesService.findOneByName(name);
+  @Public()
+  @Get('byDepartment/:departmentId')
+  findByDepartment(@Param('departmentId', ParseIntPipe) departmentId: number) {
+    return this.municipalitiesService.findByDepartment(departmentId);
   }
 
   @Roles(Role.Coordinator)

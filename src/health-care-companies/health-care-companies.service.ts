@@ -3,11 +3,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateHealthCareCompanyDto } from './dto/create-health-care-company.dto';
-import { UpdateHealthCareCompanyDto } from './dto/update-health-care-company.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { HealthCareCompany } from './entities/health-care-company.entity';
-import { Repository } from 'typeorm';
+
+import { CreateHealthCareCompanyDto, UpdateHealthCareCompanyDto } from './dto';
 
 @Injectable()
 export class HealthCareCompaniesService {
@@ -16,7 +16,9 @@ export class HealthCareCompaniesService {
     private healthCareCompanyRepository: Repository<HealthCareCompany>,
   ) {}
 
-  async create(createHealthCareCompanyDto: CreateHealthCareCompanyDto) {
+  async create(
+    createHealthCareCompanyDto: CreateHealthCareCompanyDto,
+  ): Promise<HealthCareCompany> {
     try {
       const healthCareCompany = this.healthCareCompanyRepository.create(
         createHealthCareCompanyDto,
@@ -24,30 +26,31 @@ export class HealthCareCompaniesService {
       return await this.healthCareCompanyRepository.save(healthCareCompany);
     } catch (error) {
       if (error.code === '23505') {
-        throw new BadRequestException(
-          'El framework ya se encuentra registrado',
-        );
+        throw new BadRequestException('La EPS ya se encuentra registrada');
       }
       throw new InternalServerErrorException('Error interno en el servidor');
     }
   }
 
-  findAll() {
-    return this.healthCareCompanyRepository.find();
+  async findAll(): Promise<HealthCareCompany[]> {
+    return await this.healthCareCompanyRepository.find();
   }
 
-  findOne(id: number) {
-    return this.healthCareCompanyRepository.findOneBy({ id });
+  async findOne(id: number): Promise<HealthCareCompany> {
+    return await this.healthCareCompanyRepository.findOneBy({ id });
   }
 
-  update(id: number, updateHealthCareCompanyDto: UpdateHealthCareCompanyDto) {
-    return this.healthCareCompanyRepository.update(
+  async update(
+    id: number,
+    updateHealthCareCompanyDto: UpdateHealthCareCompanyDto,
+  ): Promise<UpdateResult> {
+    return await this.healthCareCompanyRepository.update(
       id,
       updateHealthCareCompanyDto,
     );
   }
 
-  remove(id: number) {
-    return this.healthCareCompanyRepository.softDelete({ id });
+  async remove(id: number): Promise<{ id: number } & HealthCareCompany> {
+    return await this.healthCareCompanyRepository.softRemove({ id });
   }
 }

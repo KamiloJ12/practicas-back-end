@@ -7,7 +7,7 @@ import { CreateProgrammingLanguageDto } from './dto/create-programming-language.
 import { UpdateProgrammingLanguageDto } from './dto/update-programming-language.dto';
 import { ProgrammingLanguage } from './entities/programming-language.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class ProgrammingLanguagesService {
@@ -16,7 +16,9 @@ export class ProgrammingLanguagesService {
     private programmingLanguageRepository: Repository<ProgrammingLanguage>,
   ) {}
 
-  async create(createProgrammingLanguageDto: CreateProgrammingLanguageDto) {
+  async create(
+    createProgrammingLanguageDto: CreateProgrammingLanguageDto,
+  ): Promise<ProgrammingLanguage> {
     try {
       const programmingLanguage = this.programmingLanguageRepository.create(
         createProgrammingLanguageDto,
@@ -32,25 +34,25 @@ export class ProgrammingLanguagesService {
     }
   }
 
-  findAll() {
-    return this.programmingLanguageRepository.find();
+  async findAll(): Promise<ProgrammingLanguage[]> {
+    return await this.programmingLanguageRepository.find();
   }
 
-  findOne(id: number) {
-    return this.programmingLanguageRepository.findOneBy({ id });
+  async findOne(id: number): Promise<ProgrammingLanguage> {
+    return await this.programmingLanguageRepository.findOneBy({ id });
   }
 
-  update(
+  async update(
     id: number,
     updateProgrammingLanguageDto: UpdateProgrammingLanguageDto,
-  ) {
-    return this.programmingLanguageRepository.update(
+  ): Promise<UpdateResult> {
+    return await this.programmingLanguageRepository.update(
       id,
       updateProgrammingLanguageDto,
     );
   }
 
-  remove(id: number) {
-    return this.programmingLanguageRepository.softDelete(id);
+  async remove(id: number): Promise<{ id: number } & ProgrammingLanguage> {
+    return await this.programmingLanguageRepository.softRemove({ id });
   }
 }

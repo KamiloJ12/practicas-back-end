@@ -3,11 +3,11 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { CreateCountryDto } from './dto/create-country.dto';
-import { UpdateCountryDto } from './dto/update-country.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Like, Repository, UpdateResult } from 'typeorm';
 import { Country } from './entities/country.entity';
-import { Like, Repository } from 'typeorm';
+
+import { CreateCountryDto, UpdateCountryDto } from './dto';
 
 @Injectable()
 export class CountriesService {
@@ -16,7 +16,7 @@ export class CountriesService {
     private countriesRepository: Repository<Country>,
   ) {}
 
-  async create(createCountryDto: CreateCountryDto) {
+  async create(createCountryDto: CreateCountryDto): Promise<Country> {
     try {
       const country = this.countriesRepository.create({
         name: createCountryDto.name.toLowerCase(),
@@ -30,12 +30,12 @@ export class CountriesService {
     }
   }
 
-  findAll() {
-    return this.countriesRepository.find();
+  async findAll(): Promise<Country[]> {
+    return await this.countriesRepository.find();
   }
 
-  findByName(name: string) {
-    return this.countriesRepository.find({
+  async findByName(name: string): Promise<Country[]> {
+    return await this.countriesRepository.find({
       where: {
         name: Like(`%${name.toLowerCase()}%`),
       },
@@ -43,29 +43,23 @@ export class CountriesService {
     });
   }
 
-  findOne(id: number) {
-    return this.countriesRepository.findOne({
+  async findOne(id: number): Promise<Country> {
+    return await this.countriesRepository.findOne({
       where: { id },
       relations: ['departments'],
     });
   }
 
-  findOneByName(name: string) {
-    return this.countriesRepository.findOne({
-      where: {
-        name: Like(`%${name.toLowerCase()}%`),
-      },
-      relations: ['departments'],
-    });
-  }
-
-  update(id: number, updateCountryDto: UpdateCountryDto) {
-    return this.countriesRepository.update(id, {
+  async update(
+    id: number,
+    updateCountryDto: UpdateCountryDto,
+  ): Promise<UpdateResult> {
+    return await this.countriesRepository.update(id, {
       name: updateCountryDto.name.toLowerCase(),
     });
   }
 
-  remove(id: number) {
-    return this.countriesRepository.softRemove({ id });
+  async remove(id: number): Promise<{ id: number } & Country> {
+    return await this.countriesRepository.softRemove({ id });
   }
 }

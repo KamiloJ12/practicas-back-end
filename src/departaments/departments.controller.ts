@@ -9,9 +9,10 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+
+import { CreateDepartmentDto, UpdateDepartmentDto } from './dto';
+
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('departments')
@@ -24,24 +25,28 @@ export class DepartamentsController {
     return this.departmentsService.create(createDepartmentDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.departmentsService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findOne(id);
   }
 
+  @Public()
   @Get('name/:name')
   findByName(@Param('name') name: string) {
     return this.departmentsService.findByName(name);
   }
 
-  @Get('/department/name/:name')
-  findOneByName(@Param('name') name: string) {
-    return this.departmentsService.findOneByName(name);
+  @Public()
+  @Get('byCountry/:countryId')
+  findByCountry(@Param('countryId', ParseIntPipe) countryId: number) {
+    return this.departmentsService.findByCountry(countryId);
   }
 
   @Roles(Role.Coordinator)

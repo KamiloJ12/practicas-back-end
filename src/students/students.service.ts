@@ -39,6 +39,8 @@ export class StudentsService {
         'programmingLanguages',
         'frameworks',
         'developmentArea',
+        'identityDocument',
+        'identityDocument.documentType',
       ],
     });
   }

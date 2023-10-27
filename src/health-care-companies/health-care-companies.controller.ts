@@ -9,9 +9,9 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { HealthCareCompaniesService } from './health-care-companies.service';
-import { CreateHealthCareCompanyDto } from './dto/create-health-care-company.dto';
-import { UpdateHealthCareCompanyDto } from './dto/update-health-care-company.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { CreateHealthCareCompanyDto, UpdateHealthCareCompanyDto } from './dto';
+
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('health-care-companies')
@@ -26,11 +26,13 @@ export class HealthCareCompaniesController {
     return this.healthCareCompaniesService.create(createHealthCareCompanyDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.healthCareCompaniesService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.healthCareCompaniesService.findOne(id);

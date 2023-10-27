@@ -9,9 +9,13 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { HealthCareCompaniesEnrollmentService } from './health-care-companies-enrollment.service';
-import { CreateHealthCareCompaniesEnrollmentDto } from './dto/create-health-care-companies-enrollment.dto';
-import { UpdateHealthCareCompaniesEnrollmentDto } from './dto/update-health-care-companies-enrollment.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+
+import {
+  CreateHealthCareCompaniesEnrollmentDto,
+  UpdateHealthCareCompaniesEnrollmentDto,
+} from './dto';
+
+import { Roles } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('health-care-companies-enrollment')

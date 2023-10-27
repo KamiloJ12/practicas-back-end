@@ -10,7 +10,7 @@ import {
 import { ProgrammingLanguagesService } from './programming-languages.service';
 import { CreateProgrammingLanguageDto } from './dto/create-programming-language.dto';
 import { UpdateProgrammingLanguageDto } from './dto/update-programming-language.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('programming-languages')
@@ -27,11 +27,13 @@ export class ProgrammingLanguagesController {
     );
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.programmingLanguagesService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.programmingLanguagesService.findOne(+id);

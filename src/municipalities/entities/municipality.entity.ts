@@ -30,7 +30,7 @@ export class Municipality {
     () => IdentityDocument,
     (identityDocument) => identityDocument.issuancePlace,
   )
-  public identityDocuments: IdentityDocument[];
+  identityDocuments: IdentityDocument[];
 
   @CreateDateColumn()
   createdDate: Date;

@@ -9,10 +9,11 @@ import {
   Delete,
 } from '@nestjs/common';
 import { DocumentTypeService } from './document-type.service';
-import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
-import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
+
+import { CreateDocumentTypeDto, UpdateDocumentTypeDto } from './dto';
+
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
-import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('document-type')
 export class DocumentTypeController {
@@ -24,12 +25,13 @@ export class DocumentTypeController {
     return this.documentTypeService.create(createDocumentTypeDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.documentTypeService.findAll();
   }
 
-  @Roles(Role.Coordinator)
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.documentTypeService.findOneById(id);

@@ -58,6 +58,9 @@ export class Student {
   @Column()
   status: string;
 
+  @Column()
+  pictureFile: string;
+
   @OneToOne(() => IdentityDocument, {
     eager: true,
     cascade: true,
