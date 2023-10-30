@@ -1,3 +1,4 @@
+import { Optional } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, IsString } from 'class-validator';
 import { DocumentType } from 'src/document-type/entities/document-type.entity';
@@ -10,6 +11,9 @@ export class CreateIdentityDocumentDto {
 
   @IsNotEmpty()
   documentType: DocumentType;
+
+  @Optional()
+  documentFile: string;
 
   @IsNotEmpty()
   @IsDate()

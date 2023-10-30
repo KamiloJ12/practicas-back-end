@@ -1,13 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { CreateIdentityDocumentDto } from './dto/create-identity-document.dto';
 import { UpdateIdentityDocumentDto } from './dto/update-identity-document.dto';
 
 import { IdentityDocument } from './entities/identity-document.entity';
-import { join } from 'path';
-import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class IdentityDocumentsService {
@@ -17,24 +15,22 @@ export class IdentityDocumentsService {
   ) {}
 
   async create(
-    file: Express.Multer.File,
     createIdentityDocumentDto: CreateIdentityDocumentDto,
-  ) {
-    const identityDocument = this.identityDocumentRepository.create({
-      ...createIdentityDocumentDto,
-      documentFile: file.filename,
-    });
+  ): Promise<IdentityDocument> {
+    const identityDocument = this.identityDocumentRepository.create(
+      createIdentityDocumentDto,
+    );
     return await this.identityDocumentRepository.save(identityDocument);
   }
 
-  findAll() {
-    return this.identityDocumentRepository.find({
+  async findAll(): Promise<IdentityDocument[]> {
+    return await this.identityDocumentRepository.find({
       relations: ['documentType'],
     });
   }
 
-  findOne(id: number) {
-    return this.identityDocumentRepository.findOne({
+  async findOne(id: number): Promise<IdentityDocument> {
+    return await this.identityDocumentRepository.findOne({
       where: { id },
       relations: ['documentType'],
     });
@@ -43,42 +39,14 @@ export class IdentityDocumentsService {
   async update(
     id: number,
     updateIdentityDocumentDto: UpdateIdentityDocumentDto,
-    file?: Express.Multer.File,
-  ) {
-    if (file) {
-      const identityDocument = await this.findOne(id);
-      const documentName = identityDocument.documentFile;
-      const path = join(
-        __dirname,
-        '../../upload/identityDocuments',
-        documentName,
-      );
-      unlinkSync(path);
-
-      return this.identityDocumentRepository.update(id, {
-        ...updateIdentityDocumentDto,
-        documentFile: file.filename,
-      });
-    }
-
-    return this.identityDocumentRepository.update(
+  ): Promise<UpdateResult> {
+    return await this.identityDocumentRepository.update(
       id,
       updateIdentityDocumentDto,
     );
   }
 
-  remove(id: number) {
-    return this.identityDocumentRepository.softDelete({ id });
-  }
-
-  image(documentName: string) {
-    const path = join(
-      __dirname,
-      '../../upload/identityDocuments',
-      documentName,
-    );
-    if (!existsSync(path))
-      throw new BadRequestException(`No document with name ${documentName}`);
-    return path;
+  async remove(id: number): Promise<{ id: number } & IdentityDocument> {
+    return await this.identityDocumentRepository.softRemove({ id });
   }
 }

@@ -31,6 +31,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   signIn(@Req() req) {
+    console.log(req);
     return this.authService.login(req.user);
   }
 

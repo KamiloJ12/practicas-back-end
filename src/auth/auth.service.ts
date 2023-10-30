@@ -91,7 +91,6 @@ export class AuthService {
 
   async resetPasswordToken(token: string, newPassword: string) {
     try {
-      console.log(token, newPassword);
       const payload = await this.jwtService.verify(token);
       if (typeof payload === 'object' && 'email' in payload) {
         this.resetPassword(payload.id, newPassword);

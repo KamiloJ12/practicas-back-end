@@ -43,19 +43,19 @@ export class Student {
   @Column({ type: 'bigint' })
   phoneNumber: number; // dirección de telefono
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   studentCode: number; // Codigo
 
-  @Column()
+  @Column({ nullable: true })
   classScheduleFile: string; // horario de clase -> documento
 
-  @Column()
+  @Column({ nullable: true })
   currentSemester: number; // semetre actual
 
   @Column()
   resumeDocumentFile: string; // hoja de vida -> documento
 
-  @Column()
+  @Column({ default: 'Registro' })
   status: string;
 
   @Column()

@@ -1,11 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Role } from 'src/auth/enums/role.enum';
 
 @Injectable()
 export class StudentsService {
@@ -14,22 +12,19 @@ export class StudentsService {
     private studentsRepository: Repository<Student>,
   ) {}
 
-  create(createStudentDto: CreateStudentDto, user: User) {
-    if (user.role != Role.Student)
-      throw new UnauthorizedException('The user is not a student');
-    const student = this.studentsRepository.create({
-      ...createStudentDto,
-      user,
-    });
-    return this.studentsRepository.save(student);
+  async create(createStudentDto: CreateStudentDto) {
+    // if (user.role != Role.Student)
+    //   throw new UnauthorizedException('The user is not a student');
+    const student = this.studentsRepository.create(createStudentDto);
+    return await this.studentsRepository.save(student);
   }
 
-  findAll() {
-    return this.studentsRepository.find();
+  async findAll() {
+    return await this.studentsRepository.find();
   }
 
-  findOne(id: number) {
-    return this.studentsRepository.findOne({
+  async findOne(id: number) {
+    return await this.studentsRepository.findOne({
       where: { id },
       relations: [
         'residenceDepartament',
@@ -45,11 +40,17 @@ export class StudentsService {
     });
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return this.studentsRepository.update(id, updateStudentDto);
+  async findOneByUserId(userId: number) {
+    return await this.studentsRepository.findOne({
+      where: { user: { id: userId } },
+    });
   }
 
-  remove(id: number) {
-    return this.studentsRepository.softRemove({ id });
+  async update(id: number, updateStudentDto: UpdateStudentDto) {
+    return await this.studentsRepository.update(id, updateStudentDto);
+  }
+
+  async remove(id: number) {
+    return await this.studentsRepository.softRemove({ id });
   }
 }

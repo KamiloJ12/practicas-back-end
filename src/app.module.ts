@@ -26,6 +26,7 @@ import { ProgrammingLanguagesModule } from './programming-languages/programming-
 import { StudentsModule } from './students/students.module';
 import { UsersModule } from './users/users.module';
 import { AffiliationTypeModule } from './affiliation-type/affiliation-type.module';
+import { DriveService } from './drive/drive.service';
 
 @Module({
   imports: [
@@ -77,6 +78,7 @@ import { AffiliationTypeModule } from './affiliation-type/affiliation-type.modul
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    DriveService,
   ],
 })
 export class AppModule {}

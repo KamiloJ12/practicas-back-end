@@ -11,7 +11,7 @@ import {
 import { FrameworksService } from './frameworks.service';
 import { CreateFrameworkDto } from './dto/create-framework.dto';
 import { UpdateFrameworkDto } from './dto/update-framework.dto';
-import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
 @Controller('frameworks')
@@ -24,11 +24,13 @@ export class FrameworksController {
     return this.frameworksService.create(createFrameworkDto);
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.frameworksService.findAll();
   }
 
+  @Public()
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.frameworksService.findOne(id);
