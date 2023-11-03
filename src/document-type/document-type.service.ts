@@ -4,10 +4,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
+import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
+import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 import { DocumentType } from './entities/document-type.entity';
-
-import { CreateDocumentTypeDto, UpdateDocumentTypeDto } from './dto';
 
 @Injectable()
 export class DocumentTypeService {
@@ -16,7 +16,9 @@ export class DocumentTypeService {
     private documentTypeRepository: Repository<DocumentType>,
   ) {}
 
-  async create(createDocumentTypeDto: CreateDocumentTypeDto) {
+  async create(
+    createDocumentTypeDto: CreateDocumentTypeDto,
+  ): Promise<DocumentType> {
     try {
       const documentType = this.documentTypeRepository.create(
         createDocumentTypeDto,
@@ -25,26 +27,29 @@ export class DocumentTypeService {
     } catch (error) {
       if (error.code === '23505') {
         throw new BadRequestException(
-          'El departamento ya se encuentra registrado',
+          'El tipo de documento ya se encuentra registrado',
         );
       }
       throw new InternalServerErrorException('Error interno en el servidor');
     }
   }
 
-  findAll() {
-    return this.documentTypeRepository.find();
+  async findAll(): Promise<DocumentType[]> {
+    return await this.documentTypeRepository.find();
   }
 
-  findOneById(id: number) {
-    return this.documentTypeRepository.findOneBy({ id });
+  async findOneById(id: number): Promise<DocumentType> {
+    return await this.documentTypeRepository.findOneBy({ id });
   }
 
-  update(id: number, updateDocumentTypeDto: UpdateDocumentTypeDto) {
-    return this.documentTypeRepository.update(id, updateDocumentTypeDto);
+  async update(
+    id: number,
+    updateDocumentTypeDto: UpdateDocumentTypeDto,
+  ): Promise<UpdateResult> {
+    return await this.documentTypeRepository.update(id, updateDocumentTypeDto);
   }
 
-  remove(id: number) {
-    return this.documentTypeRepository.softRemove({ id });
+  async remove(id: number): Promise<{ id: number } & DocumentType> {
+    return await this.documentTypeRepository.softRemove({ id });
   }
 }

@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { AffiliationTypeService } from './affiliation-type.service';
-import { CreateAffiliationTypeDto, UpdateAffiliationTypeDto } from './dto';
+import { CreateAffiliationTypeDto, UpdateAffiliationTypeDto } from './dto/';
 import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { AffiliationType } from 'src/affiliation-type/entities/affiliation-type.entity';
 
 @Controller('affiliation-type')
 export class AffiliationTypeController {
@@ -18,36 +22,76 @@ export class AffiliationTypeController {
     private readonly affiliationTypeService: AffiliationTypeService,
   ) {}
 
-  @Roles(Role.Coordinator)
+  /**
+   * Crea un nuevo tipo de afiliación.
+   * @param createAffiliationTypeDto - Los datos para crear el tipo de afiliación.
+   * @returns El tipo de afiliación creado.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Post()
-  create(@Body() createAffiliationTypeDto: CreateAffiliationTypeDto) {
-    return this.affiliationTypeService.create(createAffiliationTypeDto);
+  @UseGuards(JwtAuthGuard) // Protege la ruta con autenticación
+  async create(
+    @Body() createAffiliationTypeDto: CreateAffiliationTypeDto,
+  ): Promise<AffiliationType> {
+    return await this.affiliationTypeService.create(createAffiliationTypeDto);
   }
 
+  /**
+   * Obtiene una lista de todos los tipos de afiliación.
+   * @returns Una lista de tipos de afiliación.
+   */
   @Public()
   @Get()
-  findAll() {
-    return this.affiliationTypeService.findAll();
+  async findAll(): Promise<AffiliationType[]> {
+    return await this.affiliationTypeService.findAll();
   }
 
+  /**
+   * Obtiene un tipo de afiliación por su ID.
+   * @param id - El ID del tipo de afiliación a recuperar.
+   * @returns El tipo de afiliación o un mensaje de error si no se encuentra.
+   */
   @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.affiliationTypeService.findOne(+id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<AffiliationType> {
+    return await this.affiliationTypeService.findOne(id);
   }
 
-  @Roles(Role.Coordinator)
+  /**
+   * Actualiza un tipo de afiliación por su ID.
+   * @param id - El ID del tipo de afiliación a actualizar.
+   * @param updateAffiliationTypeDto - Los datos para actualizar el tipo de afiliación.
+   * @returns El tipo de afiliación actualizado o un mensaje de error si no se encuentra.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @UseGuards(JwtAuthGuard)
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateAffiliationTypeDto: UpdateAffiliationTypeDto,
-  ) {
-    return this.affiliationTypeService.update(+id, updateAffiliationTypeDto);
+  ): Promise<AffiliationType> {
+    return await this.affiliationTypeService.update(
+      id,
+      updateAffiliationTypeDto,
+    );
   }
 
-  @Roles(Role.Coordinator)
+  /**
+   * Elimina un tipo de afiliación por su ID.
+   * @param id - El ID del tipo de afiliación a eliminar.
+   * @returns El tipo de afiliación eliminado o un mensaje de error si no se encuentra.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.affiliationTypeService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ id: number } & AffiliationType> {
+    return await this.affiliationTypeService.remove(id);
   }
 }

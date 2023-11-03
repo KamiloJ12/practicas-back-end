@@ -17,12 +17,10 @@ import { DevelopmentAreasModule } from './development_areas/development_areas.mo
 import { DocumentTypeModule } from './document-type/document-type.module';
 import { EmailConfirmationModule } from './email-confirmation/email-confirmation.module';
 import { EmailModule } from './email/email.module';
-import { FrameworksModule } from './frameworks/frameworks.module';
 import { HealthCareCompaniesEnrollmentModule } from './health-care-companies-enrollment/health-care-companies-enrollment.module';
 import { HealthCareCompaniesModule } from './health-care-companies/health-care-companies.module';
 import { IdentityDocumentsModule } from './identity-documents/identity-documents.module';
 import { MunicipalitiesModule } from './municipalities/municipalities.module';
-import { ProgrammingLanguagesModule } from './programming-languages/programming-languages.module';
 import { StudentsModule } from './students/students.module';
 import { UsersModule } from './users/users.module';
 import { AffiliationTypeModule } from './affiliation-type/affiliation-type.module';
@@ -62,8 +60,6 @@ import { DriveService } from './drive/drive.service';
     MunicipalitiesModule,
     HealthCareCompaniesModule,
     HealthCareCompaniesEnrollmentModule,
-    FrameworksModule,
-    ProgrammingLanguagesModule,
     DevelopmentAreasModule,
     AffiliationTypeModule,
   ],

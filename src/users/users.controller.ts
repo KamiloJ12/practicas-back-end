@@ -6,55 +6,76 @@ import {
   Patch,
   Param,
   Delete,
-  UseInterceptors,
-  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import { Role } from '../auth/enums/role.enum';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Roles(Role.Coordinator)
+  /**
+   * Crea un nuevo usuario.
+   * @param createUserDto - Datos para crear el usuario.
+   * @returns El usuario creado.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return await this.usersService.create(createUserDto);
   }
 
-  @Roles(Role.Coordinator)
-  @Post('csv')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadCSV(@UploadedFile() file): Promise<void> {
-    console.log(file);
-    return this.usersService.processCSV(file);
-  }
-
-  @Roles(Role.Coordinator)
+  /**
+   * Obtiene una lista de todos los usuarios.
+   * @returns Una lista de usuarios.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(): Promise<User[]> {
+    return await this.usersService.findAll();
   }
 
-  @Roles(Role.Coordinator)
+  /**
+   * Obtiene un usuario por su ID.
+   * @param id - ID del usuario a recuperar.
+   * @returns El usuario encontrado.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.usersService.findOneById(id);
+  async findOne(@Param('id') id: number): Promise<User> {
+    return await this.usersService.findOneById(id);
   }
 
-  @Roles(Role.Coordinator)
+  /**
+   * Actualiza un usuario por su ID.
+   * @param id - ID del usuario a actualizar.
+   * @param updateUserDto - Datos para actualizar el usuario.
+   * @returns El usuario actualizado.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  async update(
+    @Param('id') id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    return await this.usersService.update(id, updateUserDto);
   }
 
-  @Roles(Role.Coordinator)
+  /**
+   * Elimina un usuario por su ID.
+   * @param id - ID del usuario a eliminar.
+   * @throws Roles(Role.COORDINATOR) - Se requiere el rol de coordinador para acceder.
+   */
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.usersService.remove(id);
+  async remove(@Param('id') id: number): Promise<{ id: number } & User> {
+    return await this.usersService.remove(id);
   }
 }

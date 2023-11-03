@@ -4,14 +4,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-
+import { Repository, UpdateResult } from 'typeorm';
+import { CreateHealthCareCompaniesEnrollmentDto } from './dto/create-health-care-companies-enrollment.dto';
+import { UpdateHealthCareCompaniesEnrollmentDto } from './dto/update-health-care-companies-enrollment.dto';
 import { HealthCareCompaniesEnrollment } from './entities/health-care-companies-enrollment.entity';
-
-import {
-  CreateHealthCareCompaniesEnrollmentDto,
-  UpdateHealthCareCompaniesEnrollmentDto,
-} from './dto';
 
 @Injectable()
 export class HealthCareCompaniesEnrollmentService {
@@ -22,8 +18,19 @@ export class HealthCareCompaniesEnrollmentService {
 
   async create(
     createHealthCareCompaniesEnrollmentDto: CreateHealthCareCompaniesEnrollmentDto,
-  ) {
+    fileId?: string,
+  ): Promise<HealthCareCompaniesEnrollment> {
     try {
+      if (fileId) {
+        const healthCareCompaniesEnrollment =
+          this.healthCareCompaniesEnrollmentRepository.create({
+            ...createHealthCareCompaniesEnrollmentDto,
+            documentHealthFile: fileId,
+          });
+        return await this.healthCareCompaniesEnrollmentRepository.save(
+          healthCareCompaniesEnrollment,
+        );
+      }
       const healthCareCompaniesEnrollment =
         this.healthCareCompaniesEnrollmentRepository.create(
           createHealthCareCompaniesEnrollmentDto,
@@ -41,25 +48,29 @@ export class HealthCareCompaniesEnrollmentService {
     }
   }
 
-  findAll() {
-    return this.healthCareCompaniesEnrollmentRepository.find();
+  async findAll(): Promise<HealthCareCompaniesEnrollment[]> {
+    return await this.healthCareCompaniesEnrollmentRepository.find();
   }
 
-  findOne(id: number) {
-    return this.healthCareCompaniesEnrollmentRepository.findOneBy({ id });
+  async findOne(id: number): Promise<HealthCareCompaniesEnrollment> {
+    return await this.healthCareCompaniesEnrollmentRepository.findOneBy({ id });
   }
 
-  update(
+  async update(
     id: number,
     updateHealthCareCompaniesEnrollmentDto: UpdateHealthCareCompaniesEnrollmentDto,
-  ) {
-    return this.healthCareCompaniesEnrollmentRepository.update(
+  ): Promise<UpdateResult> {
+    return await this.healthCareCompaniesEnrollmentRepository.update(
       id,
       updateHealthCareCompaniesEnrollmentDto,
     );
   }
 
-  remove(id: number) {
-    return this.healthCareCompaniesEnrollmentRepository.softDelete({ id });
+  async remove(
+    id: number,
+  ): Promise<{ id: number } & HealthCareCompaniesEnrollment> {
+    return await this.healthCareCompaniesEnrollmentRepository.softRemove({
+      id,
+    });
   }
 }

@@ -10,15 +10,16 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
-  JoinTable,
-  ManyToMany,
 } from 'typeorm';
 import { Department } from 'src/departaments/entities/department.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
-import { ProgrammingLanguage } from 'src/programming-languages/entities/programming-language.entity';
-import { Framework } from 'src/frameworks/entities/framework.entity';
 import { DevelopmentArea } from '../../development_areas/entities/development_area.entity';
+
+/*
+  JoinTable,
+  ManyToMany,
+*/
 
 @Entity()
 export class Student {
@@ -43,13 +44,13 @@ export class Student {
   @Column({ type: 'bigint' })
   phoneNumber: number; // dirección de telefono
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true })
   studentCode: number; // Codigo
 
-  @Column({ nullable: true })
+  @Column()
   classScheduleFile: string; // horario de clase -> documento
 
-  @Column({ nullable: true })
+  @Column()
   currentSemester: number; // semetre actual
 
   @Column()
@@ -63,7 +64,6 @@ export class Student {
 
   @OneToOne(() => IdentityDocument, {
     eager: true,
-    cascade: true,
   })
   @JoinColumn()
   identityDocument: IdentityDocument;
@@ -89,20 +89,12 @@ export class Student {
   @JoinColumn()
   healthCareCompanyEnrollment: HealthCareCompaniesEnrollment;
 
-  @ManyToMany(
-    () => ProgrammingLanguage,
-    (programmingLanguage: ProgrammingLanguage) => programmingLanguage.students,
-  )
-  @JoinTable()
-  programmingLanguages: ProgrammingLanguage[];
-
-  @ManyToMany(() => Framework, (framework: Framework) => framework.students)
-  @JoinTable()
-  frameworks: Framework[];
-
   @OneToOne(
     () => DevelopmentArea,
     (developmentArea: DevelopmentArea) => developmentArea.student,
+    {
+      cascade: true,
+    },
   )
   @JoinColumn()
   developmentArea: DevelopmentArea;

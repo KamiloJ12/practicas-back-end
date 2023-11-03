@@ -20,25 +20,25 @@ export class DevelopmentAreasController {
     private readonly developmentAreasService: DevelopmentAreasService,
   ) {}
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Post()
   create(@Body() createDevelopmentAreaDto: CreateDevelopmentAreaDto) {
     return this.developmentAreasService.create(createDevelopmentAreaDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get()
   findAll() {
     return this.developmentAreasService.findAll();
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.developmentAreasService.findOne(id);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -47,7 +47,7 @@ export class DevelopmentAreasController {
     return this.developmentAreasService.update(id, updateDevelopmentAreaDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.developmentAreasService.remove(id);

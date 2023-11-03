@@ -8,11 +8,9 @@ import {
   Delete,
   ParseIntPipe,
 } from '@nestjs/common';
-
+import { IdentityDocumentsService } from './identity-documents.service';
 import { CreateIdentityDocumentDto } from './dto/create-identity-document.dto';
 import { UpdateIdentityDocumentDto } from './dto/update-identity-document.dto';
-import { IdentityDocumentsService } from './identity-documents.service';
-
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 
@@ -22,25 +20,25 @@ export class IdentityDocumentsController {
     private readonly identityDocumentsService: IdentityDocumentsService,
   ) {}
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Post()
   create(@Body() createIdentityDocumentDto: CreateIdentityDocumentDto) {
     return this.identityDocumentsService.create(createIdentityDocumentDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get()
   findAll() {
     return this.identityDocumentsService.findAll();
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.identityDocumentsService.findOne(id);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -49,7 +47,7 @@ export class IdentityDocumentsController {
     return this.identityDocumentsService.update(id, updateIdentityDocumentDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.identityDocumentsService.remove(id);

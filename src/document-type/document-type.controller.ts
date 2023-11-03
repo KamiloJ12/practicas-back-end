@@ -9,9 +9,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { DocumentTypeService } from './document-type.service';
-
-import { CreateDocumentTypeDto, UpdateDocumentTypeDto } from './dto';
-
+import { CreateDocumentTypeDto } from './dto/create-document-type.dto';
+import { UpdateDocumentTypeDto } from './dto/update-document-type.dto';
 import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
@@ -19,7 +18,7 @@ import { Role } from 'src/auth/enums/role.enum';
 export class DocumentTypeController {
   constructor(private readonly documentTypeService: DocumentTypeService) {}
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Post()
   create(@Body() createDocumentTypeDto: CreateDocumentTypeDto) {
     return this.documentTypeService.create(createDocumentTypeDto);
@@ -37,7 +36,7 @@ export class DocumentTypeController {
     return this.documentTypeService.findOneById(id);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -46,7 +45,7 @@ export class DocumentTypeController {
     return this.documentTypeService.update(id, updateDocumentTypeDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.documentTypeService.remove(id);

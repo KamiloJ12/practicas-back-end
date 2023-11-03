@@ -7,7 +7,7 @@ import { CreateDevelopmentAreaDto } from './dto/create-development_area.dto';
 import { UpdateDevelopmentAreaDto } from './dto/update-development_area.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DevelopmentArea } from './entities/development_area.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 @Injectable()
 export class DevelopmentAreasService {
@@ -16,7 +16,9 @@ export class DevelopmentAreasService {
     private developmentAreaRepository: Repository<DevelopmentArea>,
   ) {}
 
-  async create(createDevelopmentAreaDto: CreateDevelopmentAreaDto) {
+  async create(
+    createDevelopmentAreaDto: CreateDevelopmentAreaDto,
+  ): Promise<DevelopmentArea> {
     try {
       const developmentArea = this.developmentAreaRepository.create(
         createDevelopmentAreaDto,
@@ -32,19 +34,25 @@ export class DevelopmentAreasService {
     }
   }
 
-  findAll() {
-    return this.developmentAreaRepository.find();
+  async findAll(): Promise<DevelopmentArea[]> {
+    return await this.developmentAreaRepository.find();
   }
 
-  findOne(id: number) {
-    return this.developmentAreaRepository.findOneBy({ id });
+  async findOne(id: number): Promise<DevelopmentArea> {
+    return await this.developmentAreaRepository.findOneBy({ id });
   }
 
-  update(id: number, updateDevelopmentAreaDto: UpdateDevelopmentAreaDto) {
-    return this.developmentAreaRepository.update(id, updateDevelopmentAreaDto);
+  async update(
+    id: number,
+    updateDevelopmentAreaDto: UpdateDevelopmentAreaDto,
+  ): Promise<UpdateResult> {
+    return await this.developmentAreaRepository.update(
+      id,
+      updateDevelopmentAreaDto,
+    );
   }
 
-  remove(id: number) {
-    return this.developmentAreaRepository.softDelete(id);
+  async remove(id: number): Promise<{ id: number } & DevelopmentArea> {
+    return await this.developmentAreaRepository.softRemove({ id });
   }
 }

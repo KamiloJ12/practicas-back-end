@@ -9,12 +9,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { HealthCareCompaniesEnrollmentService } from './health-care-companies-enrollment.service';
-
-import {
-  CreateHealthCareCompaniesEnrollmentDto,
-  UpdateHealthCareCompaniesEnrollmentDto,
-} from './dto';
-
+import { CreateHealthCareCompaniesEnrollmentDto } from './dto/create-health-care-companies-enrollment.dto';
+import { UpdateHealthCareCompaniesEnrollmentDto } from './dto/update-health-care-companies-enrollment.dto';
 import { Roles } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
@@ -24,7 +20,7 @@ export class HealthCareCompaniesEnrollmentController {
     private readonly healthCareCompaniesEnrollmentService: HealthCareCompaniesEnrollmentService,
   ) {}
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Post()
   create(
     @Body()
@@ -35,19 +31,19 @@ export class HealthCareCompaniesEnrollmentController {
     );
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get()
   findAll() {
     return this.healthCareCompaniesEnrollmentService.findAll();
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.healthCareCompaniesEnrollmentService.findOne(id);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -60,7 +56,7 @@ export class HealthCareCompaniesEnrollmentController {
     );
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.healthCareCompaniesEnrollmentService.remove(id);

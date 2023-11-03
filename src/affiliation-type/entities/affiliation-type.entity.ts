@@ -1,4 +1,5 @@
-import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
+import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity'; // Importación de la entidad relacionada "HealthCareCompaniesEnrollment"
+
 import {
   Column,
   CreateDateColumn,
@@ -9,27 +10,27 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity() // Define que esta clase es una entidad de la base de datos.
 export class AffiliationType {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number; // Identificador único del tipo de afiliación
 
-  @Column({ unique: true })
-  name: string;
+  @Column({ unique: true }) // Define una columna única para el nombre del tipo de afiliación
+  name: string; // Nombre del tipo de afiliación (debe ser único)
 
   @OneToMany(
     () => HealthCareCompaniesEnrollment,
     (healthCareCompaniesEnrollment) =>
       healthCareCompaniesEnrollment.affiliationType,
   )
-  enrollments: HealthCareCompaniesEnrollment[];
+  enrollments: HealthCareCompaniesEnrollment[]; // Relación uno a muchos con las inscripciones de empresas de atención médica
 
-  @CreateDateColumn()
-  createdDate: Date;
+  @CreateDateColumn() // Columna para la fecha de creación
+  createdDate: Date; // Fecha en la que se creó el tipo de afiliación
 
-  @UpdateDateColumn()
-  updatedDate: Date;
+  @UpdateDateColumn() // Columna para la fecha de última actualización
+  updatedDate: Date; // Fecha de la última actualización del tipo de afiliación
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeleteDateColumn() // Columna para la fecha de eliminación lógica (si se aplica)
+  deletedAt: Date; // Fecha de eliminación lógica del tipo de afiliación
 }

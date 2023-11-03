@@ -9,9 +9,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { MunicipalitiesService } from './municipalities.service';
-
-import { CreateMunicipalityDto, UpdateMunicipalityDto } from './dto';
-
+import { CreateMunicipalityDto } from './dto/create-municipality.dto';
+import { UpdateMunicipalityDto } from './dto/update-municipality.dto';
 import { Roles, Public } from 'src/auth/decorators';
 import { Role } from 'src/auth/enums/role.enum';
 
@@ -19,7 +18,7 @@ import { Role } from 'src/auth/enums/role.enum';
 export class MunicipalitiesController {
   constructor(private readonly municipalitiesService: MunicipalitiesService) {}
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Post()
   create(@Body() createMunicipalityDto: CreateMunicipalityDto) {
     return this.municipalitiesService.create(createMunicipalityDto);
@@ -49,7 +48,7 @@ export class MunicipalitiesController {
     return this.municipalitiesService.findByDepartment(departmentId);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -58,7 +57,7 @@ export class MunicipalitiesController {
     return this.municipalitiesService.update(id, updateMunicipalityDto);
   }
 
-  @Roles(Role.Coordinator)
+  @Roles(Role.COORDINATOR)
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.municipalitiesService.remove(+id);

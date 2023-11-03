@@ -8,5 +8,6 @@ import { HealthCareCompaniesEnrollment } from './entities/health-care-companies-
   imports: [TypeOrmModule.forFeature([HealthCareCompaniesEnrollment])],
   controllers: [HealthCareCompaniesEnrollmentController],
   providers: [HealthCareCompaniesEnrollmentService],
+  exports: [HealthCareCompaniesEnrollmentService],
 })
 export class HealthCareCompaniesEnrollmentModule {}

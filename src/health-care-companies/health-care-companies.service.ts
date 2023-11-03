@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
+import { CreateHealthCareCompanyDto } from './dto/create-health-care-company.dto';
+import { UpdateHealthCareCompanyDto } from './dto/update-health-care-company.dto';
 import { HealthCareCompany } from './entities/health-care-company.entity';
-
-import { CreateHealthCareCompanyDto, UpdateHealthCareCompanyDto } from './dto';
 
 @Injectable()
 export class HealthCareCompaniesService {

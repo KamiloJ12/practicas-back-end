@@ -1,78 +1,87 @@
 import { Optional } from '@nestjs/common';
 import { Transform } from 'class-transformer';
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
+  IsObject,
   IsOptional,
   IsPositive,
   IsString,
 } from 'class-validator';
 import { Department } from 'src/departaments/entities/department.entity';
+import { DevelopmentArea } from 'src/development_areas/entities/development_area.entity';
+import { HealthCareCompaniesEnrollment } from 'src/health-care-companies-enrollment/entities/health-care-companies-enrollment.entity';
 import { IdentityDocument } from 'src/identity-documents/entities/identity-document.entity';
 import { Municipality } from 'src/municipalities/entities/municipality.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export class CreateStudentDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   firstName: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   lastName: string;
 
-  @Optional()
+  @IsString()
+  @IsNotEmpty()
+  gender: string;
+
+  @Transform(({ value }) => new Date(value))
+  @IsNotEmpty()
+  birthdate: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  address: string;
+
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
+  @IsNotEmpty()
+  @IsPositive()
+  phoneNumber: number;
+
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   @IsPositive()
   studentCode: number;
 
-  @Optional()
+  @IsOptional()
   @IsString()
-  classScheduleDocumentFile: string;
+  classScheduleFile: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  gender: 'Femenino' | 'Masculino';
+  pictureFile: string;
 
-  @IsNotEmpty()
-  @Transform(({ value }) => new Date(value).toISOString())
-  birthdate: Date;
-
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  address: string;
+  resumeDocumentFile: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  @Transform(({ value }) => Number(value))
-  @IsPositive()
-  phoneNumber: number;
-
-  @Optional()
-  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  @IsInt()
   @IsPositive()
   currentSemester: number;
 
+  // Relaciones
+  @IsNotEmpty()
+  @IsObject()
+  identityDocument: IdentityDocument;
+
   @Optional()
   user: User;
-
-  @Optional()
-  resumeDocumentFile: string;
-
-  @Optional()
-  pictureFile: string;
 
   @IsNotEmpty()
   residenceDepartament: Department;
 
   @IsNotEmpty()
   residenceMunicipality: Municipality;
-  /* @IsNotEmpty()
-  status: string;
- */
 
-  @IsOptional()
-  identityDocument: IdentityDocument;
+  @IsNotEmpty()
+  healthCareCompanyEnrollment: HealthCareCompaniesEnrollment;
 
-  //TODO: Falta modificar dto
+  @IsNotEmpty()
+  developmentArea: DevelopmentArea;
 }

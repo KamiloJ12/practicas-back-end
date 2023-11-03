@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository, UpdateResult } from 'typeorm';
+import { CreateMunicipalityDto } from './dto/create-municipality.dto';
+import { UpdateMunicipalityDto } from './dto/update-municipality.dto';
 import { Municipality } from './entities/municipality.entity';
-
-import { CreateMunicipalityDto, UpdateMunicipalityDto } from './dto';
 
 @Injectable()
 export class MunicipalitiesService {
