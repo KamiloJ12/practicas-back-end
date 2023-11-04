@@ -134,4 +134,27 @@ export class DriveService {
       );
     }
   }
+
+  /**
+   * Recupera un archivo desde Google Drive.
+   * @param fileId ID del archivo a recuperar.
+   * @returns Contenido del archivo como un flujo de datos.
+   */
+  async getFileFromDrive(fileId: string): Promise<Buffer> {
+    try {
+      const response = await this.drive.files.get({
+        fileId: fileId,
+        alt: 'media',
+      });
+
+      // El archivo se descarga como un flujo de datos
+      const fileStream = response.data;
+      return fileStream;
+    } catch (error) {
+      console.error(
+        `Error al recuperar el archivo desde Google Drive: ${error.message}`,
+      );
+      throw new Error('No se pudo recuperar el archivo desde Google Drive.');
+    }
+  }
 }

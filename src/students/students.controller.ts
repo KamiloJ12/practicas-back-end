@@ -51,6 +51,12 @@ export class StudentsController {
   }
 
   @Roles(Role.COORDINATOR)
+  @Get('practices')
+  async getPracticantes() {
+    return this.studentsService.getPracticantes();
+  }
+
+  @Roles(Role.COORDINATOR)
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.studentsService.findOne(id);

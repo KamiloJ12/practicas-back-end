@@ -25,6 +25,9 @@ import { StudentsModule } from './students/students.module';
 import { UsersModule } from './users/users.module';
 import { AffiliationTypeModule } from './affiliation-type/affiliation-type.module';
 import { DriveService } from './drive/drive.service';
+import { DriveModule } from './drive/drive.module';
+import { KnowledgeModule } from './knowledge/knowledge.module';
+import { CompaniesModule } from './companies/companies.module';
 
 @Module({
   imports: [
@@ -62,6 +65,9 @@ import { DriveService } from './drive/drive.service';
     HealthCareCompaniesEnrollmentModule,
     DevelopmentAreasModule,
     AffiliationTypeModule,
+    DriveModule,
+    KnowledgeModule,
+    CompaniesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -74,7 +80,6 @@ import { DriveService } from './drive/drive.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
-    DriveService,
   ],
 })
 export class AppModule {}

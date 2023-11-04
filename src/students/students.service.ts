@@ -127,10 +127,12 @@ export class StudentsService {
   async uploadFileToStudentFolder(
     file: Express.Multer.File,
     studentFolderId: string,
+    isPublic: boolean = false,
   ) {
     const fileMetadata = {
       name: file.originalname,
       parents: [studentFolderId],
+      public: isPublic,
     };
 
     const media = {
@@ -150,6 +152,10 @@ export class StudentsService {
     return await this.studentsRepository.find();
   }
 
+  async getPracticantes(): Promise<Student[]> {
+    return this.studentsRepository.find({ where: { isIntern: true } });
+  }
+
   async findOne(id: number) {
     return await this.studentsRepository.findOne({
       where: { id },
@@ -158,10 +164,10 @@ export class StudentsService {
         'residenceMunicipality',
         'healthCareCompanyEnrollment',
         'healthCareCompanyEnrollment.healthCareCompany',
-        'programmingLanguages',
-        'frameworks',
+        'healthCareCompanyEnrollment.affiliationType',
         'developmentArea',
         'identityDocument',
+        'identityDocument.issuancePlace',
         'identityDocument.documentType',
       ],
     });

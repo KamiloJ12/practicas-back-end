@@ -59,6 +59,9 @@ export class Student {
   @Column({ default: 'Registro' })
   status: string;
 
+  @Column({ default: true })
+  isIntern: boolean;
+
   @Column()
   pictureFile: string;
 

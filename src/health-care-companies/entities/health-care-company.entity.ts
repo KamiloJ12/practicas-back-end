@@ -20,6 +20,9 @@ export class HealthCareCompany {
   @Column()
   nit: string;
 
+  @Column({ default: 'eps' })
+  type: string;
+
   @OneToMany(
     () => HealthCareCompaniesEnrollment,
     (healthCareCompaniesEnrollment) =>
