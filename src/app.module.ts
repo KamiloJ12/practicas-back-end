@@ -28,6 +28,7 @@ import { DriveService } from './drive/drive.service';
 import { DriveModule } from './drive/drive.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { CompaniesModule } from './companies/companies.module';
+import { LegalRepresentativeModule } from './legal-representative/legal-representative.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { CompaniesModule } from './companies/companies.module';
     DriveModule,
     KnowledgeModule,
     CompaniesModule,
+    LegalRepresentativeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -3,8 +3,6 @@ import { Transform } from 'class-transformer';
 import {
   IsInt,
   IsNotEmpty,
-  IsNumber,
-  IsObject,
   IsOptional,
   IsPositive,
   IsString,
@@ -44,7 +42,7 @@ export class CreateStudentDto {
   phoneNumber: number;
 
   @Transform(({ value }) => parseInt(value))
-  @IsNumber()
+  @IsInt()
   @IsPositive()
   studentCode: number;
 
@@ -67,7 +65,6 @@ export class CreateStudentDto {
 
   // Relaciones
   @IsNotEmpty()
-  @IsObject()
   identityDocument: IdentityDocument;
 
   @Optional()
